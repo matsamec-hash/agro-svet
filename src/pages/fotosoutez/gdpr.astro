@@ -44,10 +44,12 @@ import Layout from '../../layouts/Layout.astro';
 
     <h2>5. Příjemci</h2>
     <ul>
-      <li>Resend.com (email delivery) — USA, Standard Contractual Clauses</li>
-      <li>Supabase (hosting dat) — EU/USA, SCC</li>
-      <li>Cloudflare (CDN, hosting) — globální</li>
+      <li>Resend, Inc. (doručování e-mailů) — USA, standardní smluvní doložky (SCC)</li>
+      <li>Hostinger International Ltd. — Kypr; server s databází a úložištěm fotografií v datovém centru ve Frankfurtu nad Mohanem. Databázi provozujeme na vlastním serveru (open-source Supabase), nikoli u společnosti Supabase, Inc.</li>
+      <li>Cloudflare, Inc. — USA; reverzní proxy, CDN a ochrana proti útokům, prochází jím veškerý provoz webu; SCC</li>
+      <li>Cloudflare Turnstile — ochrana nahrávání a hlasování před roboty; při zobrazení formuláře se váš prohlížeč připojí k Cloudflare a ten dostane vaši IP adresu</li>
     </ul>
+    <p>Úplný seznam příjemců a předávání údajů mimo EU je v <a href="/zpracovani-osobnich-udaju/">obecných zásadách zpracování osobních údajů</a>.</p>
 
     <h2>6. Práva subjektu</h2>
     <ul>
@@ -61,12 +63,12 @@ import Layout from '../../layouts/Layout.astro';
 
     <h2>8. Cookies</h2>
     <ul>
-      <li><code>sb-access-token</code>, <code>sb-refresh-token</code> — auth (Supabase)</li>
-      <li><code>contest_voter_id</code> — identifikace voltera v kole</li>
-      <li><code>cf-turnstile</code> — anti-bot Cloudflare</li>
+      <li><code>sb-access-token</code>, <code>sb-refresh-token</code> — přihlášení; vzniknou po přihlášení, platí 7 dní</li>
+      <li><code>contest_voter_id</code> — identifikace ověřeného hlasujícího; vznikne po ověření e-mailu, platí do konce hlasování v daném kole</li>
     </ul>
+    <p>Obě skupiny jsou technicky nezbytné. Ostatní cookies webu jsou popsány v <a href="/zpracovani-osobnich-udaju/">obecných zásadách</a>.</p>
 
-    <p><strong>Účinnost:</strong> 1. ledna 2026</p>
+    <p><strong>Účinnost:</strong> 1. ledna 2026 · <strong>Poslední úprava:</strong> 21. listopadu 2026</p>
   </div>
 </Layout>
 

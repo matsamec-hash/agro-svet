@@ -47,6 +47,7 @@ const meta = META[locale] ?? META.cs;
       <li>Telefón (kontakt na inzerenta)</li>
       <li>Lokalita (mesto/kraj)</li>
       <li>Heslo (hašované, nikdy v plain texte)</li>
+      <li>Pri prihlásení cez Google: e-mail a meno z vášho účtu Google (heslo ku Googlu nevidíme)</li>
     </ul>
 
     <h3>2.3 Bazár — inzeráty</h3>
@@ -62,10 +63,26 @@ const meta = META[locale] ?? META.cs;
       <li>Odtlačok (hash) IP adresy odosielateľa — ochrana formulára pred zneužitím</li>
     </ul>
 
-    <h3>2.5 Fotosúťaž</h3>
-    <p>Pre fotosúťaž platia samostatné <a href="/fotosoutez/gdpr/">zásady spracúvania</a>.</p>
+    <h3>2.5 Prevzaté inzeráty z iných inzertných serverov</h3>
+    <p>Redakcia niekedy prevezme verejný inzerát predajcu poľnohospodárskej techniky z iného inzertného servera (napríklad z Bazoša) a pripraví z neho <strong>neverejný koncept</strong> inzerátu v našom bazári. Údaje preto nezískavame od vás, ale z verejného inzerátu (informácia podľa čl. 14 GDPR). Ukladáme:</p>
+    <ul>
+      <li>meno a telefón predajcu uvedené v inzeráte, odkaz na pôvodný inzerát a e-mail, ak ho redakcia doplní</li>
+      <li>text inzerátu a jeho strojový prepis (OpenAI, Anthropic); fotky neprebierame, zostávajú u predajcu</li>
+    </ul>
+    <p>Predajcovi pošleme e-mailom alebo cez WhatsApp odkaz, na ktorom môže koncept zverejniť, alebo ho zmazať. Zverejní sa až po jeho potvrdení; pri potvrdení uložíme čas, IP adresu a verziu podmienok používania. Ak nechcete, aby sme váš kontakt uchovávali, napíšte na <a href="mailto:info@samecdigital.com">info@samecdigital.com</a> — záznam aj koncept zmažeme.</p>
 
-    <h3>2.6 Kontaktný formulár</h3>
+    <h3>2.6 Kalendár akcií — nahlásenie akcie</h3>
+    <ul>
+      <li>E-mail toho, kto akciu nahlási (povinný): nezverejňuje sa, použijeme ho na potvrdenie prijatia a na oznámenie, či akciu zverejníme</li>
+      <li>Telefón (voliteľný): ak ho vyplníte, <strong>zverejní sa pri akcii</strong> po schválení</li>
+      <li>Názov a popis akcie, miesto konania, organizátor, web, vstupné a prípadné fotky — zverejnia sa pri akcii po schválení</li>
+      <li>IP adresa — len na obmedzenie počtu nahratých fotiek (najviac 10 za hodinu); do databázy sa neukladá</li>
+    </ul>
+
+    <h3>2.7 Fotosúťaž</h3>
+    <p>Pre fotosúťaž platia samostatné <a href="/fotosoutez/gdpr/" hreflang="cs">zásady spracúvania</a> (v češtine).</p>
+
+    <h3>2.8 Kontaktný formulár</h3>
     <ul>
       <li>E-mailová adresa (aby sme vám mohli odpovedať)</li>
       <li>Meno, ak ho uvediete</li>
@@ -74,7 +91,7 @@ const meta = META[locale] ?? META.cs;
     </ul>
     <p>Správu neukladáme do databázy; doručí sa e-mailom do našej schránky info@samecdigital.com. Na adresu z formulára neposielame nič iné ako odpoveď.</p>
 
-    <h3>2.7 Technické údaje (všetci návštevníci)</h3>
+    <h3>2.9 Technické údaje (všetci návštevníci)</h3>
     <ul>
       <li>IP adresa (anonymizovaná v logu, anti-fraud, max 30 dní)</li>
       <li>User-agent prehliadača (štatistika, debugging)</li>
@@ -91,6 +108,8 @@ const meta = META[locale] ?? META.cs;
         <tr><td>Prevádzka používateľského účtu (bazár)</td><td>Plnenie zmluvy — ods. 1 písm. b)</td></tr>
         <tr><td>Zverejňovanie inzerátov</td><td>Plnenie zmluvy — ods. 1 písm. b)</td></tr>
         <tr><td>Meranie návštevnosti (Google Analytics, Microsoft Clarity)</td><td>Súhlas — ods. 1 písm. a)</td></tr>
+        <tr><td>Zverejnenie akcie v kalendári na vašu žiadosť, potvrdenie prijatia a oznámenie rozhodnutia o zverejnení</td><td>Plnenie zmluvy — ods. 1 písm. b)</td></tr>
+        <tr><td>Uloženie kontaktu predajcu z verejného inzerátu a ponuka, aby si inzerát prevzal do bazára (pozri 2.5)</td><td>Oprávnený záujem — ods. 1 písm. f) (ponúknuť predajcovi zverejnenie jeho ponuky v bazári)</td></tr>
         <tr><td>Anti-fraud, bezpečnosť prevádzky</td><td>Oprávnený záujem — ods. 1 písm. f)</td></tr>
         <tr><td>Plnenie zákonných povinností (účtovníctvo pri platených službách)</td><td>Právna povinnosť — ods. 1 písm. c)</td></tr>
         <tr><td>Vybavenie oznámenia závadného obsahu v bazári (DSA čl. 16) vrátane potvrdenia o prijatí a oznámenia rozhodnutia</td><td>Právna povinnosť — ods. 1 písm. c)</td></tr>
@@ -110,6 +129,8 @@ const meta = META[locale] ?? META.cs;
       <li><strong>IP adresy z anti-fraudu</strong> (pokusy o zadanie kódu): najviac 30 dní.</li>
       <li><strong>Oznámenia závadného inzerátu:</strong> meno a e-mail oznamovateľa 6 mesiacov od oznámenia rozhodnutia (dovtedy sa proti nemu môžete ohradiť), potom ich mažeme; odtlačok IP adresy 90 dní.</li>
       <li><strong>Správy z kontaktného formulára:</strong> v e-mailovej schránke počas vybavovania, potom najviac 2 roky od poslednej komunikácie; ak sa správa týka uplatnenia alebo obhajoby právnych nárokov (napr. sťažnosť na porušenie práv), do skončenia veci.</li>
+      <li><strong>Kalendár akcií:</strong> e-mail a telefón toho, kto akciu nahlásil, uchovávame, kým akciu z kalendára nezmažeme; po jej skončení ich automaticky nemažeme. Na vašu žiadosť ich zmažeme skôr.</li>
+      <li><strong>Prevzaté inzeráty:</strong> odkaz na prevzatie platí 30 dní. Kontakt, koncept inzerátu ani záznam o potvrdení (čas, IP adresa, verzia podmienok) automaticky nemažeme; zmažeme ich na vašu žiadosť a predajca môže koncept zmazať sám odkazom, ktorý od nás dostal.</li>
       <li><strong>Prevádzkové logy</strong> vznikajú u poskytovateľov infraštruktúry
         (Cloudflare, hosting) a riadia sa ich lehotami, nie našimi.</li>
     </ul>
@@ -122,6 +143,7 @@ const meta = META[locale] ?? META.cs;
       <li><strong>Google Ireland Limited</strong> (Írsko) — Google Analytics 4 (ID merania G-HC3JY466RR), štatistika návštevnosti; cookies <code>_ga</code> a <code>_ga_*</code> ukladajú náhodný identifikátor prehliadača až na 2 roky. Načíta sa <strong>až po vašom súhlase</strong>. Prehliadač pritom Googlu odovzdá vašu IP adresu; podľa Googlu Google Analytics 4 IP adresy neukladá. Prenos do USA na základe rámca EU–US Data Privacy Framework a SCC.</li>
       <li><strong>Microsoft Ireland Operations Limited</strong> (Írsko) — Microsoft Clarity (ID projektu ws6puxcjnb), heatmapy a záznamy návštev (pohyb myši, kliknutia, posúvanie). Načíta sa <strong>až po vašom súhlase</strong>. Prenos do USA na základe rámca EU–US Data Privacy Framework a SCC.</li>
       <li><strong>Google Ireland Limited</strong> (Írsko) — prehrávač YouTube (<code>youtube-nocookie.com</code>) pri videách v katalógu techniky a v encyklopédii. Načíta sa <strong>až po kliknutí</strong> na video, dovtedy sa z YouTube nenačíta nič. Google pritom dostane vašu IP adresu, prehrávač ukladá údaje do úložiska prehliadača (<code>localStorage</code>, IndexedDB) a údaje môžu ísť do USA (EU–US Data Privacy Framework).</li>
+      <li><strong>Google Ireland Limited</strong> (Írsko) — prihlásenie do bazára cez Google. Spustí sa <strong>až po kliknutí</strong> na tlačidlo; dovtedy sa z Googlu nenačíta nič. Google pritom dostane vašu IP adresu a údaj, že sa prihlasujete na agro-svet.cz; my od neho dostaneme váš e-mail a meno. Prenos do USA na základe rámca EU–US Data Privacy Framework a SCC.</li>
     </ul>
     <p>Na niektorých stránkach sa váš prehliadač pripája priamo k ďalším službám, ktoré tým dostanú vašu IP adresu: <strong>OpenStreetMap</strong> (mapové podklady v bazári a pri farmách), <strong>Cloudflare Turnstile</strong> (ochrana formulárov pred robotmi) a <strong>Unsplash</strong> (obrázky v sekcii Médiá). Server navyše používa <strong>Nominatim / OpenStreetMap</strong> na prevod lokality inzerátu na súradnice, <strong>Fio banku</strong> na párovanie platieb za zvýhodnenie inzerátu a služby <strong>OpenAI</strong> a <strong>Anthropic</strong> na strojové spracovanie textu inzerátov, ktoré redakcia prevezme z iných inzertných serverov. Predpoveď počasia sťahuje náš server od <strong>MET Norway</strong> (Nórsky meteorologický ústav); keď o predpoveď pre svoje pole kliknutím požiadate, odovzdáme mu len súradnice zaokrúhlené zhruba na 1 km, nie vašu IP adresu (polohu si pamätá len váš prehliadač).</p>
     <p>Vaše osobné údaje nepredávame ani neodovzdávame tretím stranám na marketingové účely.</p>
@@ -159,12 +181,24 @@ const meta = META[locale] ?? META.cs;
     </p>
 
     <h2>9. Cookies</h2>
-    <p><strong>Technicky nevyhnutné cookies</strong> (prihlásenie, hlasovanie v anketách a vo fotosúťaži) sa používajú vždy — bez nich web nefunguje. Vašu voľbu o súhlase si web pamätá v úložisku prehliadača (<code>localStorage</code>), nie v cookie.</p>
+    <p><strong>Technicky nevyhnutné cookies</strong> sa používajú vždy — bez nich by web nefungoval alebo by sa nedalo spoľahlivo hlasovať. Vašu voľbu o súhlase si web pamätá v úložisku prehliadača (<code>localStorage</code>), nie v cookie. Nastavujeme tieto vlastné cookies:</p>
+    <table class="legal-table">
+      <thead>
+        <tr><th>Cookie</th><th>Na čo slúži a kedy vznikne</th><th>Platnosť</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>sb-access-token</code>, <code>sb-refresh-token</code></td><td>prihlásenie do bazára; vznikne po prihlásení</td><td>7 dní</td></tr>
+        <tr><td><code>av_…</code> (za podčiarkovníkom názov ankety)</td><td>zapamätá, že z tohto prehliadača už v danej ankete hlasovali; vznikne po hlasovaní</td><td>30 dní</td></tr>
+        <tr><td><code>contest_voter_id</code></td><td>identifikuje overeného hlasujúceho vo fotosúťaži; vznikne po overení e-mailu</td><td>do konca hlasovania v danom kole</td></tr>
+        <tr><td><code>bv_…</code> (za podčiarkovníkom číslo inzerátu)</td><td>počítadlo zobrazení inzerátu v bazári: nenesie nič o vás, len značku, že bol inzerát v tomto prehliadači nedávno zobrazený, aby sa opakované načítanie nepočítalo; vznikne pri zobrazení inzerátu, aj pred udelením súhlasu</td><td>30 minút</td></tr>
+      </tbody>
+    </table>
     <p><strong>Analytické cookies</strong> — Google Analytics 4 (<code>_ga</code>, <code>_ga_*</code>) a Microsoft Clarity (<code>_clck</code>, <code>_clsk</code>) — sa načítajú <strong>len s vaším súhlasom</strong>. Merajú návštevnosť a to, ako sa po stránke pohybujete. Doba uloženia: <code>_ga</code> a <code>_ga_*</code> až 2 roky, <code>_clck</code> 1 rok, <code>_clsk</code> 1 deň. Ak zvolíte „Iba nevyhnutné", nenačíta sa žiadny merací skript (Google ani Microsoft) a ich cookies sa z prehliadača vymažú.</p>
+    <p>Cookies, ktoré by Microsoft Clarity uložil na vlastných doménach Microsoftu (napríklad <code>MUID</code>, <code>CLID</code>, <code>ANONCHK</code>, <code>SM</code>), z nášho webu zmazať nevieme; zrušíte ich v nastaveniach prehliadača.</p>
     <p>Nepoužívame marketingové ani reklamné cookies tretích strán.</p>
     <p>Súhlas môžete kedykoľvek odvolať odkazom <strong>Nastavenia cookies</strong> v pätičke — odvolanie je rovnako jednoduché ako udelenie (čl. 7 ods. 3 GDPR).</p>
 
-    <p class="effective"><strong>Účinnosť:</strong> 17. októbra 2026</p>
+    <p class="effective"><strong>Účinnosť:</strong> 17. októbra 2026 · <strong>Posledná úprava:</strong> 21. novembra 2026</p>
     </Fragment>
   ) : isPl ? (
     <Fragment>
@@ -193,6 +227,7 @@ const meta = META[locale] ?? META.cs;
       <li>Telefon (kontakt do ogłoszeniodawcy)</li>
       <li>Lokalizacja (miasto/region)</li>
       <li>Hasło (zahaszowane, nigdy w postaci jawnej)</li>
+      <li>Przy logowaniu przez Google: e-mail i imię z Twojego konta Google (hasła do Google nie widzimy)</li>
     </ul>
 
     <h3>2.3 Bazar — ogłoszenia</h3>
@@ -208,10 +243,26 @@ const meta = META[locale] ?? META.cs;
       <li>Skrót (hash) adresu IP nadawcy — ochrona formularza przed nadużyciami</li>
     </ul>
 
-    <h3>2.5 Fotokonkurs</h3>
+    <h3>2.5 Ogłoszenia przejęte z innych serwisów ogłoszeniowych</h3>
+    <p>Redakcja czasem przejmuje publiczne ogłoszenie sprzedawcy maszyn rolniczych z innego serwisu ogłoszeniowego (np. z Bazoša) i przygotowuje z niego <strong>niepubliczny szkic</strong> ogłoszenia w naszym bazarze. Dane nie pochodzą więc od Ciebie, lecz z publicznego ogłoszenia (informacja zgodnie z art. 14 RODO). Zapisujemy:</p>
+    <ul>
+      <li>imię sprzedawcy i telefon podane w ogłoszeniu, link do oryginalnego ogłoszenia oraz e-mail, jeśli uzupełni go redakcja</li>
+      <li>treść ogłoszenia i jej maszynowe przepisanie (OpenAI, Anthropic); zdjęć nie przejmujemy, zostają u sprzedawcy</li>
+    </ul>
+    <p>Sprzedawcy wysyłamy e-mailem lub przez WhatsApp link, pod którym może szkic opublikować albo usunąć. Zostanie opublikowany dopiero po jego potwierdzeniu; przy potwierdzeniu zapisujemy czas, adres IP i wersję warunków korzystania. Jeśli nie chcesz, abyśmy przechowywali Twój kontakt, napisz na <a href="mailto:info@samecdigital.com">info@samecdigital.com</a> — zapis i szkic usuniemy.</p>
+
+    <h3>2.6 Kalendarz wydarzeń — zgłoszenie wydarzenia</h3>
+    <ul>
+      <li>E-mail osoby zgłaszającej wydarzenie (obowiązkowy): nie jest publikowany, użyjemy go do potwierdzenia przyjęcia zgłoszenia i do poinformowania, czy wydarzenie opublikujemy</li>
+      <li>Telefon (opcjonalny): jeśli go podasz, <strong>zostanie opublikowany przy wydarzeniu</strong> po zatwierdzeniu</li>
+      <li>Nazwa i opis wydarzenia, miejsce, organizator, strona internetowa, cena wstępu i ewentualne zdjęcia — zostaną opublikowane przy wydarzeniu po zatwierdzeniu</li>
+      <li>Adres IP — wyłącznie w celu ograniczenia liczby przesyłanych zdjęć (maks. 10 na godzinę); nie jest zapisywany w bazie danych</li>
+    </ul>
+
+    <h3>2.7 Fotokonkurs</h3>
     <p>Dla fotokonkursu obowiązują odrębne <a href="/fotosoutez/gdpr/" hreflang="cs">zasady przetwarzania</a> (po czesku).</p>
 
-    <h3>2.6 Formularz kontaktowy</h3>
+    <h3>2.8 Formularz kontaktowy</h3>
     <ul>
       <li>Adres e-mail (abyśmy mogli odpowiedzieć)</li>
       <li>Imię i nazwisko, jeśli je podasz</li>
@@ -220,7 +271,7 @@ const meta = META[locale] ?? META.cs;
     </ul>
     <p>Wiadomości nie zapisujemy w bazie danych; trafia ona e-mailem do naszej skrzynki info@samecdigital.com. Na adres podany w formularzu wysyłamy wyłącznie odpowiedź.</p>
 
-    <h3>2.7 Dane techniczne (wszyscy odwiedzający)</h3>
+    <h3>2.9 Dane techniczne (wszyscy odwiedzający)</h3>
     <ul>
       <li>Adres IP (zanonimizowany w logu, anti-fraud, maks. 30 dni)</li>
       <li>User-agent przeglądarki (statystyka, debugowanie)</li>
@@ -237,6 +288,8 @@ const meta = META[locale] ?? META.cs;
         <tr><td>Prowadzenie konta użytkownika (bazar)</td><td>Wykonanie umowy — ust. 1 lit. b)</td></tr>
         <tr><td>Publikowanie ogłoszeń</td><td>Wykonanie umowy — ust. 1 lit. b)</td></tr>
         <tr><td>Pomiar ruchu (Google Analytics, Microsoft Clarity)</td><td>Zgoda — ust. 1 lit. a)</td></tr>
+        <tr><td>Publikacja wydarzenia w kalendarzu na Twoją prośbę, potwierdzenie przyjęcia i poinformowanie o decyzji</td><td>Wykonanie umowy — ust. 1 lit. b)</td></tr>
+        <tr><td>Zapisanie kontaktu sprzedawcy z publicznego ogłoszenia i propozycja przejęcia ogłoszenia do bazaru (zob. 2.5)</td><td>Prawnie uzasadniony interes — ust. 1 lit. f) (zaproponowanie sprzedawcy publikacji jego oferty w bazarze)</td></tr>
         <tr><td>Anti-fraud, bezpieczeństwo działania</td><td>Prawnie uzasadniony interes — ust. 1 lit. f)</td></tr>
         <tr><td>Wypełnienie obowiązków ustawowych (księgowość przy usługach płatnych)</td><td>Obowiązek prawny — ust. 1 lit. c)</td></tr>
         <tr><td>Rozpatrzenie zgłoszenia nielegalnych treści w bazarze (DSA art. 16), w tym potwierdzenie otrzymania i powiadomienie o decyzji</td><td>Obowiązek prawny — ust. 1 lit. c)</td></tr>
@@ -256,6 +309,8 @@ const meta = META[locale] ?? META.cs;
       <li><strong>Adresy IP z zabezpieczeń anti-fraud</strong> (próby wpisania kodu): maksymalnie 30 dni.</li>
       <li><strong>Zgłoszenia niedozwolonych ogłoszeń:</strong> imię i nazwisko oraz e-mail zgłaszającego przez 6 miesięcy od powiadomienia o decyzji (w tym czasie możesz się od niej odwołać), następnie je usuwamy; skrót adresu IP 90 dni.</li>
       <li><strong>Wiadomości z formularza kontaktowego:</strong> w skrzynce e-mail przez czas rozpatrywania sprawy, a następnie maksymalnie 2 lata od ostatniej korespondencji; jeśli wiadomość dotyczy dochodzenia roszczeń lub obrony przed nimi (np. skarga na naruszenie praw) — do zakończenia sprawy.</li>
+      <li><strong>Kalendarz wydarzeń:</strong> e-mail i telefon osoby, która zgłosiła wydarzenie, przechowujemy do czasu usunięcia wydarzenia z kalendarza; po jego zakończeniu nie usuwamy ich automatycznie. Na Twoją prośbę usuniemy je wcześniej.</li>
+      <li><strong>Przejęte ogłoszenia:</strong> link do przejęcia jest ważny 30 dni. Kontaktu, szkicu ogłoszenia ani zapisu potwierdzenia (czas, adres IP, wersja warunków) nie usuwamy automatycznie; usuniemy je na Twoją prośbę, a sprzedawca może usunąć szkic sam, korzystając z linku, który od nas otrzymał.</li>
       <li><strong>Logi serwerowe</strong> powstają u dostawców infrastruktury (Cloudflare, hosting)
         i podlegają ich terminom, nie naszym.</li>
     </ul>
@@ -268,6 +323,7 @@ const meta = META[locale] ?? META.cs;
       <li><strong>Google Ireland Limited</strong> (Irlandia) — Google Analytics 4 (identyfikator pomiaru G-HC3JY466RR), statystyka odwiedzin; pliki cookie <code>_ga</code> i <code>_ga_*</code> przechowują losowy identyfikator przeglądarki do 2 lat. Ładuje się <strong>dopiero po Twojej zgodzie</strong>. Przeglądarka przekazuje przy tym Google Twój adres IP; według Google Google Analytics 4 nie przechowuje adresów IP. Transfer do USA na podstawie EU–US Data Privacy Framework i SCC.</li>
       <li><strong>Microsoft Ireland Operations Limited</strong> (Irlandia) — Microsoft Clarity (identyfikator projektu ws6puxcjnb), mapy ciepła i nagrania wizyt (ruch myszy, kliknięcia, przewijanie). Ładuje się <strong>dopiero po Twojej zgodzie</strong>. Transfer do USA na podstawie EU–US Data Privacy Framework i SCC.</li>
       <li><strong>Google Ireland Limited</strong> (Irlandia) — odtwarzacz YouTube (<code>youtube-nocookie.com</code>) przy filmach w katalogu maszyn i w encyklopedii. Ładuje się <strong>dopiero po kliknięciu</strong> w film; wcześniej nic nie jest pobierane z YouTube. Google otrzymuje przy tym Twój adres IP, odtwarzacz zapisuje dane w pamięci przeglądarki (<code>localStorage</code>, IndexedDB), a dane mogą trafić do USA (EU–US Data Privacy Framework).</li>
+      <li><strong>Google Ireland Limited</strong> (Irlandia) — logowanie do bazaru przez Google. Uruchamia się <strong>dopiero po kliknięciu</strong> przycisku; wcześniej nic nie jest pobierane z Google. Google otrzymuje przy tym Twój adres IP i informację, że logujesz się do agro-svet.cz; od Google otrzymujemy Twój e-mail i imię. Transfer do USA na podstawie EU–US Data Privacy Framework i SCC.</li>
     </ul>
     <p>Na niektórych stronach Twoja przeglądarka łączy się bezpośrednio z innymi usługami, które otrzymują przy tym Twój adres IP: <strong>OpenStreetMap</strong> (podkłady mapowe w Agro giełdzie i przy gospodarstwach), <strong>Cloudflare Turnstile</strong> (ochrona formularzy przed botami) oraz <strong>Unsplash</strong> (obrazy w sekcji Media). Serwer korzysta ponadto z <strong>Nominatim / OpenStreetMap</strong> do zamiany lokalizacji ogłoszenia na współrzędne, z <strong>Fio banka</strong> do parowania płatności za wyróżnienie ogłoszenia oraz z usług <strong>OpenAI</strong> i <strong>Anthropic</strong> do maszynowego przetwarzania tekstu ogłoszeń, które redakcja przejmuje z innych serwisów ogłoszeniowych. Prognozę pogody pobiera nasz serwer z <strong>MET Norway</strong> (Norweski Instytut Meteorologiczny); gdy poprosisz kliknięciem o prognozę dla swojego pola, przekazujemy mu tylko współrzędne zaokrąglone do ok. 1 km, a nie Twój adres IP (lokalizację zapamiętuje tylko Twoja przeglądarka).</p>
     <p>Twoich danych osobowych nie sprzedajemy ani nie przekazujemy stronom trzecim w celach marketingowych.</p>
@@ -305,12 +361,24 @@ const meta = META[locale] ?? META.cs;
     </p>
 
     <h2>9. Pliki cookie</h2>
-    <p><strong>Technicznie niezbędne pliki cookie</strong> (logowanie, głosowanie w ankietach i w konkursie fotograficznym) używane są zawsze — bez nich serwis nie działa. Twój wybór dotyczący zgody serwis zapamiętuje w pamięci przeglądarki (<code>localStorage</code>), nie w pliku cookie.</p>
+    <p><strong>Technicznie niezbędne pliki cookie</strong> używane są zawsze — bez nich serwis nie działałby albo nie dałoby się rzetelnie głosować. Twój wybór dotyczący zgody serwis zapamiętuje w pamięci przeglądarki (<code>localStorage</code>), nie w pliku cookie. Ustawiamy następujące własne pliki cookie:</p>
+    <table class="legal-table">
+      <thead>
+        <tr><th>Plik cookie</th><th>Do czego służy i kiedy powstaje</th><th>Okres ważności</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>sb-access-token</code>, <code>sb-refresh-token</code></td><td>logowanie do bazaru; powstaje po zalogowaniu</td><td>7 dni</td></tr>
+        <tr><td><code>av_…</code> (po podkreślniku nazwa ankiety)</td><td>zapamiętuje, że z tej przeglądarki oddano już głos w danej ankiecie; powstaje po oddaniu głosu</td><td>30 dni</td></tr>
+        <tr><td><code>contest_voter_id</code></td><td>identyfikuje zweryfikowanego głosującego w konkursie fotograficznym; powstaje po weryfikacji e-maila</td><td>do końca głosowania w danej rundzie</td></tr>
+        <tr><td><code>bv_…</code> (po podkreślniku numer ogłoszenia)</td><td>licznik wyświetleń ogłoszenia w bazarze: nie niesie nic o Tobie, tylko znacznik, że ogłoszenie zostało niedawno wyświetlone w tej przeglądarce, aby ponowne wczytanie nie było liczone; powstaje przy wyświetleniu ogłoszenia, także przed udzieleniem zgody</td><td>30 minut</td></tr>
+      </tbody>
+    </table>
     <p><strong>Analityczne pliki cookie</strong> — Google Analytics 4 (<code>_ga</code>, <code>_ga_*</code>) i Microsoft Clarity (<code>_clck</code>, <code>_clsk</code>) — ładują się <strong>wyłącznie za Twoją zgodą</strong>. Mierzą statystykę odwiedzin oraz sposób poruszania się po stronie. Okres przechowywania: <code>_ga</code> i <code>_ga_*</code> do 2 lat, <code>_clck</code> 1 rok, <code>_clsk</code> 1 dzień. Jeśli wybierzesz „Tylko niezbędne", nie zostanie wczytany żaden skrypt pomiarowy (Google ani Microsoft), a ich pliki cookie zostaną usunięte z przeglądarki.</p>
+    <p>Plików cookie, które Microsoft Clarity zapisałby w domenach należących do Microsoftu (np. <code>MUID</code>, <code>CLID</code>, <code>ANONCHK</code>, <code>SM</code>), nie możemy usunąć z naszego serwisu; można je usunąć w ustawieniach przeglądarki.</p>
     <p>Nie używamy marketingowych ani reklamowych plików cookie stron trzecich.</p>
     <p>Zgodę możesz wycofać w dowolnym momencie linkiem <strong>Ustawienia plików cookie</strong> w stopce — wycofanie jest równie łatwe jak wyrażenie zgody (art. 7 ust. 3 RODO).</p>
 
-    <p class="effective"><strong>Data wejścia w życie:</strong> 17 października 2026</p>
+    <p class="effective"><strong>Data wejścia w życie:</strong> 17 października 2026 · <strong>Ostatnia zmiana:</strong> 21 listopada 2026</p>
     </Fragment>
   ) : isUk ? (
     <Fragment>
@@ -339,6 +407,7 @@ const meta = META[locale] ?? META.cs;
       <li>Телефон (контакт для оголошувача)</li>
       <li>Локація (місто/область)</li>
       <li>Пароль (хешований, ніколи у відкритому вигляді)</li>
+      <li>Під час входу через Google: e-mail та ім'я з вашого облікового запису Google (пароля від Google ми не бачимо)</li>
     </ul>
 
     <h3>2.3 Барахолка — оголошення</h3>
@@ -354,10 +423,26 @@ const meta = META[locale] ?? META.cs;
       <li>Відбиток (хеш) IP-адреси відправника — захист форми від зловживань</li>
     </ul>
 
-    <h3>2.5 Фотоконкурс</h3>
+    <h3>2.5 Оголошення, перебрані з інших сайтів оголошень</h3>
+    <p>Редакція іноді переймає публічне оголошення продавця сільгосптехніки з іншого сайту оголошень (наприклад, з Bazoš) і готує з нього <strong>непублічну чернетку</strong> оголошення на нашій барахолці. Тобто дані ми отримуємо не від вас, а з публічного оголошення (інформація відповідно до ст. 14 GDPR). Ми зберігаємо:</p>
+    <ul>
+      <li>ім'я та телефон продавця, зазначені в оголошенні, посилання на оригінальне оголошення та e-mail, якщо його додасть редакція</li>
+      <li>текст оголошення та його машинний переказ (OpenAI, Anthropic); фото не переймаємо, вони залишаються в продавця</li>
+    </ul>
+    <p>Продавцю ми надсилаємо електронною поштою або через WhatsApp посилання, за яким він може опублікувати чернетку або видалити її. Вона буде опублікована лише після його підтвердження; під час підтвердження ми зберігаємо час, IP-адресу та версію умов користування. Якщо ви не хочете, щоб ми зберігали ваш контакт, напишіть на <a href="mailto:info@samecdigital.com">info@samecdigital.com</a> — запис і чернетку ми видалимо.</p>
+
+    <h3>2.6 Календар подій — повідомлення про подію</h3>
+    <ul>
+      <li>E-mail особи, яка повідомляє про подію (обов'язковий): не публікується, ми використаємо його для підтвердження отримання та повідомлення, чи опублікуємо подію</li>
+      <li>Телефон (необов'язковий): якщо ви його вкажете, <strong>він буде опублікований біля події</strong> після схвалення</li>
+      <li>Назва й опис події, місце, організатор, вебсайт, вартість вхідного квитка та можливі фото — публікуються біля події після схвалення</li>
+      <li>IP-адреса — лише для обмеження кількості завантажуваних фото (не більше 10 на годину); у базі даних не зберігається</li>
+    </ul>
+
+    <h3>2.7 Фотоконкурс</h3>
     <p>Для фотоконкурсу діють окремі <a href="/fotosoutez/gdpr/" hreflang="cs">засади обробки</a> (чеською).</p>
 
-    <h3>2.6 Контактна форма</h3>
+    <h3>2.8 Контактна форма</h3>
     <ul>
       <li>Адреса електронної пошти (щоб ми могли вам відповісти)</li>
       <li>Ім'я, якщо ви його вкажете</li>
@@ -366,7 +451,7 @@ const meta = META[locale] ?? META.cs;
     </ul>
     <p>Повідомлення ми не зберігаємо в базі даних; воно надходить електронною поштою до нашої скриньки info@samecdigital.com. На адресу з форми ми не надсилаємо нічого, крім відповіді.</p>
 
-    <h3>2.7 Технічні дані (усі відвідувачі)</h3>
+    <h3>2.9 Технічні дані (усі відвідувачі)</h3>
     <ul>
       <li>IP-адреса (анонімізована в лозі, anti-fraud, макс. 30 днів)</li>
       <li>User-agent браузера (статистика, налагодження)</li>
@@ -383,6 +468,8 @@ const meta = META[locale] ?? META.cs;
         <tr><td>Робота облікового запису користувача (барахолка)</td><td>Виконання договору — ч. 1 п. b)</td></tr>
         <tr><td>Публікація оголошень</td><td>Виконання договору — ч. 1 п. b)</td></tr>
         <tr><td>Вимірювання відвідуваності (Google Analytics, Microsoft Clarity)</td><td>Згода — ч. 1 п. a)</td></tr>
+        <tr><td>Публікація події в календарі на ваше прохання, підтвердження отримання та повідомлення про рішення</td><td>Виконання договору — ч. 1 п. b)</td></tr>
+        <tr><td>Збереження контакту продавця з публічного оголошення та пропозиція перенести оголошення на барахолку (див. 2.5)</td><td>Законний інтерес — ч. 1 п. f) (запропонувати продавцю публікацію його пропозиції на барахолці)</td></tr>
         <tr><td>Anti-fraud, безпека роботи</td><td>Законний інтерес — ч. 1 п. f)</td></tr>
         <tr><td>Виконання законодавчих обов'язків (бухгалтерія при платних послугах)</td><td>Правовий обов'язок — ч. 1 п. c)</td></tr>
         <tr><td>Розгляд повідомлень про незаконний вміст на барахолці (DSA ст. 16), зокрема підтвердження отримання та повідомлення про рішення</td><td>Правовий обов'язок — ч. 1 п. c)</td></tr>
@@ -402,6 +489,8 @@ const meta = META[locale] ?? META.cs;
       <li><strong>IP-адреси з anti-fraud</strong> (спроби введення коду): щонайбільше 30 днів.</li>
       <li><strong>Повідомлення про недопустимі оголошення:</strong> ім'я та e-mail заявника — 6 місяців від повідомлення про рішення (протягом цього часу його можна оскаржити), потім видаляємо; відбиток IP-адреси — 90 днів.</li>
       <li><strong>Повідомлення з контактної форми:</strong> в електронній скриньці на час розгляду, потім не довше 2 років від останнього листування; якщо повідомлення стосується пред'явлення правових вимог або захисту від них (наприклад, скарга на порушення прав), — до завершення справи.</li>
+      <li><strong>Календар подій:</strong> e-mail і телефон особи, яка повідомила про подію, зберігаємо, доки подію не видалено з календаря; після її завершення автоматично не видаляємо. На ваше прохання видалимо раніше.</li>
+      <li><strong>Перебрані оголошення:</strong> посилання для перейняття діє 30 днів. Контакт, чернетку оголошення та запис про підтвердження (час, IP-адреса, версія умов) автоматично не видаляємо; видалимо їх на ваше прохання, а продавець може видалити чернетку сам за посиланням, яке отримав від нас.</li>
       <li><strong>Технічні логи</strong> виникають у постачальників інфраструктури
         (Cloudflare, хостинг) і підпорядковані їхнім строкам, не нашим.</li>
     </ul>
@@ -414,6 +503,7 @@ const meta = META[locale] ?? META.cs;
       <li><strong>Google Ireland Limited</strong> (Ірландія) — Google Analytics 4 (ідентифікатор вимірювання G-HC3JY466RR), статистика відвідувань; файли cookie <code>_ga</code> і <code>_ga_*</code> зберігають випадковий ідентифікатор браузера до 2 років. Завантажується <strong>лише після вашої згоди</strong>. Браузер при цьому передає Google вашу IP-адресу; за даними Google, Google Analytics 4 IP-адреси не зберігає. Передавання до США на підставі EU–US Data Privacy Framework і SCC.</li>
       <li><strong>Microsoft Ireland Operations Limited</strong> (Ірландія) — Microsoft Clarity (ідентифікатор проєкту ws6puxcjnb), теплові карти та записи відвідувань (рух миші, кліки, прокручування). Завантажується <strong>лише після вашої згоди</strong>. Передавання до США на підставі EU–US Data Privacy Framework і SCC.</li>
       <li><strong>Google Ireland Limited</strong> (Ірландія) — програвач YouTube (<code>youtube-nocookie.com</code>) для відео в каталозі техніки та енциклопедії. Завантажується <strong>лише після кліку</strong> на відео; до того з YouTube нічого не завантажується. Google при цьому отримує вашу IP-адресу, програвач зберігає дані в сховищі браузера (<code>localStorage</code>, IndexedDB), а дані можуть передаватися до США (EU–US Data Privacy Framework).</li>
+      <li><strong>Google Ireland Limited</strong> (Ірландія) — вхід на барахолку через Google. Запускається <strong>лише після кліку</strong> на кнопку; до того з Google нічого не завантажується. Google при цьому отримує вашу IP-адресу та інформацію, що ви входите на agro-svet.cz; від нього ми отримуємо ваш e-mail та ім'я. Передача до США на підставі EU–US Data Privacy Framework і SCC.</li>
     </ul>
     <p>На деяких сторінках ваш браузер підключається безпосередньо до інших сервісів, які при цьому отримують вашу IP-адресу: <strong>OpenStreetMap</strong> (картографічна основа в Агро базарі та біля ферм), <strong>Cloudflare Turnstile</strong> (захист форм від ботів) і <strong>Unsplash</strong> (зображення в розділі Медіа). Сервер також використовує <strong>Nominatim / OpenStreetMap</strong> для перетворення місця оголошення на координати, <strong>Fio banka</strong> для зіставлення платежів за виділення оголошення та сервіси <strong>OpenAI</strong> і <strong>Anthropic</strong> для машинної обробки тексту оголошень, які редакція переймає з інших сайтів оголошень. Прогноз погоди наш сервер отримує від <strong>MET Norway</strong> (Норвезький метеорологічний інститут); коли ви кліком попросите прогноз для свого поля, ми передаємо йому лише координати, округлені приблизно до 1 км, а не вашу IP-адресу (місцезнаходження пам’ятає лише ваш браузер).</p>
     <p>Ваші персональні дані ми не продаємо і не передаємо третім сторонам для маркетингових цілей.</p>
@@ -449,12 +539,24 @@ const meta = META[locale] ?? META.cs;
     </p>
 
     <h2>9. Файли cookie</h2>
-    <p><strong>Технічно необхідні файли cookie</strong> (вхід, голосування в опитуваннях і фотоконкурсі) використовуються завжди — без них сайт не працює. Ваш вибір щодо згоди сайт запам’ятовує в сховищі браузера (<code>localStorage</code>), а не у файлі cookie.</p>
+    <p><strong>Технічно необхідні файли cookie</strong> використовуються завжди — без них сайт не працював би або не можна було б надійно голосувати. Ваш вибір щодо згоди сайт запам’ятовує в сховищі браузера (<code>localStorage</code>), а не у файлі cookie. Ми встановлюємо такі власні файли cookie:</p>
+    <table class="legal-table">
+      <thead>
+        <tr><th>Cookie</th><th>Для чого служить і коли виникає</th><th>Строк дії</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>sb-access-token</code>, <code>sb-refresh-token</code></td><td>вхід на барахолку; виникає після входу</td><td>7 днів</td></tr>
+        <tr><td><code>av_…</code> (після підкреслення назва опитування)</td><td>запам’ятовує, що з цього браузера вже голосували в даному опитуванні; виникає після голосування</td><td>30 днів</td></tr>
+        <tr><td><code>contest_voter_id</code></td><td>ідентифікує підтвердженого учасника голосування у фотоконкурсі; виникає після підтвердження e-mail</td><td>до кінця голосування в даному турі</td></tr>
+        <tr><td><code>bv_…</code> (після підкреслення номер оголошення)</td><td>лічильник переглядів оголошення на барахолці: не містить нічого про вас, лише позначку, що це оголошення нещодавно переглядали в цьому браузері, щоб повторне завантаження не рахувалося; виникає під час перегляду оголошення, також до надання згоди</td><td>30 хвилин</td></tr>
+      </tbody>
+    </table>
     <p><strong>Аналітичні файли cookie</strong> — Google Analytics 4 (<code>_ga</code>, <code>_ga_*</code>) і Microsoft Clarity (<code>_clck</code>, <code>_clsk</code>) — завантажуються <strong>лише за вашої згоди</strong>. Вони вимірюють відвідуваність і те, як ви рухаєтесь сторінкою. Строк зберігання: <code>_ga</code> і <code>_ga_*</code> до 2 років, <code>_clck</code> 1 рік, <code>_clsk</code> 1 день. Якщо ви оберете «Лише необхідні», не завантажиться жоден вимірювальний скрипт (Google чи Microsoft), а їхні файли cookie буде видалено з браузера.</p>
+    <p>Файли cookie, які Microsoft Clarity міг би зберегти на власних доменах Microsoft (наприклад, <code>MUID</code>, <code>CLID</code>, <code>ANONCHK</code>, <code>SM</code>), ми з нашого сайту видалити не можемо; їх можна видалити в налаштуваннях браузера.</p>
     <p>Ми не використовуємо маркетингові чи рекламні файли cookie третіх сторін.</p>
     <p>Згоду можна відкликати будь-коли посиланням <strong>Налаштування cookie</strong> в підвалі — відкликання таке саме просте, як і надання (ст. 7 п. 3 GDPR).</p>
 
-    <p class="effective"><strong>Дата набрання чинності:</strong> 17 жовтня 2026</p>
+    <p class="effective"><strong>Дата набрання чинності:</strong> 17 жовтня 2026 · <strong>Остання зміна:</strong> 21 листопада 2026</p>
     </Fragment>
   ) : isDe ? (
     <Fragment>
@@ -487,6 +589,7 @@ const meta = META[locale] ?? META.cs;
       <li>Telefon (Kontakt zum Inserenten)</li>
       <li>Ort (Stadt/Region)</li>
       <li>Passwort (gehasht, niemals im Klartext)</li>
+      <li>Bei der Anmeldung über Google: E-Mail-Adresse und Name aus Ihrem Google-Konto (Ihr Google-Passwort sehen wir nicht)</li>
     </ul>
 
     <h3>2.3 Gebrauchtmarkt — Inserate</h3>
@@ -502,10 +605,26 @@ const meta = META[locale] ?? META.cs;
       <li>Hash der IP-Adresse des Absenders — Schutz des Formulars vor Missbrauch</li>
     </ul>
 
-    <h3>2.5 Fotowettbewerb</h3>
+    <h3>2.5 Übernommene Inserate von anderen Anzeigenportalen</h3>
+    <p>Die Redaktion übernimmt gelegentlich ein öffentliches Inserat eines Landtechnik-Verkäufers von einem anderen Anzeigenportal (z. B. Bazoš) und erstellt daraus einen <strong>nicht öffentlichen Entwurf</strong> eines Inserats in unserem Gebrauchtmarkt. Die Daten erhalten wir also nicht von Ihnen, sondern aus dem öffentlichen Inserat (Information nach Art. 14 DSGVO). Wir speichern:</p>
+    <ul>
+      <li>Name und Telefonnummer des Verkäufers aus dem Inserat, den Link zum Originalinserat und die E-Mail-Adresse, sofern die Redaktion sie ergänzt</li>
+      <li>den Inseratstext und seine maschinelle Umschrift (OpenAI, Anthropic); Fotos übernehmen wir nicht, sie bleiben beim Verkäufer</li>
+    </ul>
+    <p>Dem Verkäufer senden wir per E-Mail oder WhatsApp einen Link, über den er den Entwurf veröffentlichen oder löschen kann. Veröffentlicht wird er erst nach seiner Bestätigung; bei der Bestätigung speichern wir Zeitpunkt, IP-Adresse und Version der Nutzungsbedingungen. Wenn Sie nicht möchten, dass wir Ihren Kontakt aufbewahren, schreiben Sie an <a href="mailto:info@samecdigital.com">info@samecdigital.com</a> — Datensatz und Entwurf löschen wir.</p>
+
+    <h3>2.6 Terminkalender — Meldung einer Veranstaltung</h3>
+    <ul>
+      <li>E-Mail-Adresse der meldenden Person (Pflichtangabe): wird nicht veröffentlicht, wir nutzen sie für die Eingangsbestätigung und die Mitteilung, ob wir die Veranstaltung veröffentlichen</li>
+      <li>Telefonnummer (freiwillig): wenn Sie sie angeben, <strong>wird sie nach der Freigabe bei der Veranstaltung veröffentlicht</strong></li>
+      <li>Name und Beschreibung der Veranstaltung, Ort, Veranstalter, Website, Eintrittspreis und etwaige Fotos — werden nach der Freigabe bei der Veranstaltung veröffentlicht</li>
+      <li>IP-Adresse — nur zur Begrenzung der Zahl hochgeladener Fotos (höchstens 10 pro Stunde); wird nicht in der Datenbank gespeichert</li>
+    </ul>
+
+    <h3>2.7 Fotowettbewerb</h3>
     <p>Für den Fotowettbewerb gelten gesonderte <a href="/fotosoutez/gdpr/" hreflang="cs">Verarbeitungsgrundsätze</a> (auf Tschechisch).</p>
 
-    <h3>2.6 Kontaktformular</h3>
+    <h3>2.8 Kontaktformular</h3>
     <ul>
       <li>E-Mail-Adresse (damit wir Ihnen antworten können)</li>
       <li>Name, sofern Sie ihn angeben</li>
@@ -514,7 +633,7 @@ const meta = META[locale] ?? META.cs;
     </ul>
     <p>Die Nachricht speichern wir nicht in einer Datenbank; sie wird per E-Mail an unser Postfach info@samecdigital.com zugestellt. An die im Formular angegebene Adresse senden wir ausschließlich unsere Antwort.</p>
 
-    <h3>2.7 Technische Daten (alle Besucher)</h3>
+    <h3>2.9 Technische Daten (alle Besucher)</h3>
     <ul>
       <li>IP-Adresse (im Protokoll anonymisiert, Betrugsprävention, max. 30 Tage)</li>
       <li>User-Agent des Browsers (Statistik, Fehlersuche)</li>
@@ -531,6 +650,8 @@ const meta = META[locale] ?? META.cs;
         <tr><td>Führung des Nutzerkontos (Gebrauchtmarkt)</td><td>Vertragserfüllung — Abs. 1 Buchst. b)</td></tr>
         <tr><td>Veröffentlichung von Inseraten</td><td>Vertragserfüllung — Abs. 1 Buchst. b)</td></tr>
         <tr><td>Reichweitenmessung (Google Analytics, Microsoft Clarity)</td><td>Einwilligung — Abs. 1 Buchst. a)</td></tr>
+        <tr><td>Veröffentlichung der Veranstaltung im Terminkalender auf Ihre Bitte, Eingangsbestätigung und Mitteilung der Entscheidung</td><td>Vertragserfüllung — Abs. 1 Buchst. b)</td></tr>
+        <tr><td>Speicherung des Verkäuferkontakts aus dem öffentlichen Inserat und Angebot, das Inserat in den Gebrauchtmarkt zu übernehmen (siehe 2.5)</td><td>Berechtigtes Interesse — Abs. 1 Buchst. f) (dem Verkäufer die Veröffentlichung seines Angebots im Gebrauchtmarkt anbieten)</td></tr>
         <tr><td>Betrugsprävention, Betriebssicherheit</td><td>Berechtigtes Interesse — Abs. 1 Buchst. f)</td></tr>
         <tr><td>Erfüllung gesetzlicher Pflichten (Buchhaltung bei kostenpflichtigen Diensten)</td><td>Rechtliche Verpflichtung — Abs. 1 Buchst. c)</td></tr>
         <tr><td>Bearbeitung von Meldungen rechtswidriger Inhalte im Gebrauchtmarkt (DSA Art. 16) einschließlich Eingangsbestätigung und Mitteilung der Entscheidung</td><td>Rechtliche Verpflichtung — Abs. 1 Buchst. c)</td></tr>
@@ -552,6 +673,8 @@ const meta = META[locale] ?? META.cs;
       <li><strong>IP-Adressen aus der Betrugsprävention</strong> (Versuche der Code-Eingabe): höchstens 30 Tage.</li>
       <li><strong>Meldungen unzulässiger Inserate:</strong> Name und E-Mail der meldenden Person 6 Monate ab Mitteilung der Entscheidung (so lange können Sie sich dagegen wenden), danach gelöscht; IP-Hash 90 Tage.</li>
       <li><strong>Nachrichten aus dem Kontaktformular:</strong> im E-Mail-Postfach für die Dauer der Bearbeitung, danach höchstens 2 Jahre ab der letzten Korrespondenz; betrifft die Nachricht die Geltendmachung oder Abwehr von Rechtsansprüchen (z. B. eine Beschwerde wegen Rechtsverletzung), bis zum Abschluss der Angelegenheit.</li>
+      <li><strong>Terminkalender:</strong> E-Mail-Adresse und Telefonnummer der Person, die die Veranstaltung gemeldet hat, speichern wir, bis wir die Veranstaltung aus dem Kalender löschen; nach ihrem Ende löschen wir sie nicht automatisch. Auf Ihre Bitte löschen wir sie früher.</li>
+      <li><strong>Übernommene Inserate:</strong> Der Übernahmelink gilt 30 Tage. Kontakt, Inseratsentwurf und Bestätigungsprotokoll (Zeitpunkt, IP-Adresse, Version der Bedingungen) löschen wir nicht automatisch; wir löschen sie auf Ihre Bitte, und der Verkäufer kann den Entwurf selbst über den Link löschen, den er von uns erhalten hat.</li>
       <li><strong>Server-Protokolle</strong> entstehen bei den Infrastrukturanbietern (Cloudflare,
         Hosting) und unterliegen deren Fristen, nicht unseren.</li>
     </ul>
@@ -564,6 +687,7 @@ const meta = META[locale] ?? META.cs;
       <li><strong>Google Ireland Limited</strong> (Irland) — Google Analytics 4 (Mess-ID G-HC3JY466RR), Besuchsstatistik; die Cookies <code>_ga</code> und <code>_ga_*</code> speichern eine zufällige Kennung Ihres Browsers für bis zu 2 Jahre. Wird <strong>erst nach Ihrer Einwilligung</strong> geladen. Ihr Browser übermittelt dabei Ihre IP-Adresse an Google; nach Angaben von Google speichert Google Analytics 4 keine IP-Adressen. Übermittlung in die USA auf Grundlage des EU–US Data Privacy Framework und der SCC.</li>
       <li><strong>Microsoft Ireland Operations Limited</strong> (Irland) — Microsoft Clarity (Projekt-ID ws6puxcjnb), Heatmaps und Aufzeichnungen von Besuchen (Mausbewegungen, Klicks, Scrollen). Wird <strong>erst nach Ihrer Einwilligung</strong> geladen. Übermittlung in die USA auf Grundlage des EU–US Data Privacy Framework und der SCC.</li>
       <li><strong>Google Ireland Limited</strong> (Irland) — YouTube-Player (<code>youtube-nocookie.com</code>) bei Videos im Maschinenkatalog und in der Enzyklopädie. Wird <strong>erst nach einem Klick</strong> auf das Video geladen; vorher wird nichts von YouTube abgerufen. Google erhält dabei Ihre IP-Adresse, der Player speichert Daten im Browser-Speicher (<code>localStorage</code>, IndexedDB), und Daten können in die USA übermittelt werden (EU–US Data Privacy Framework).</li>
+      <li><strong>Google Ireland Limited</strong> (Irland) — Anmeldung im Gebrauchtmarkt über Google. Wird <strong>erst nach einem Klick</strong> auf die Schaltfläche gestartet; vorher wird nichts von Google geladen. Google erhält dabei Ihre IP-Adresse und die Information, dass Sie sich bei agro-svet.cz anmelden; von Google erhalten wir Ihre E-Mail-Adresse und Ihren Namen. Übermittlung in die USA auf Grundlage des EU–US Data Privacy Framework und von SCC.</li>
     </ul>
     <p>Auf einigen Seiten verbindet sich Ihr Browser direkt mit weiteren Diensten, die dabei Ihre IP-Adresse erhalten: <strong>OpenStreetMap</strong> (Kartenmaterial im Gebrauchtmarkt und bei den Betrieben), <strong>Cloudflare Turnstile</strong> (Schutz von Formularen vor Bots) und <strong>Unsplash</strong> (Bilder im Bereich Medien). Diese Bereiche gibt es derzeit nur auf Tschechisch. Der Server nutzt außerdem <strong>Nominatim / OpenStreetMap</strong>, um den Ort eines Inserats in Koordinaten umzuwandeln, die <strong>Fio banka</strong> zum Abgleich von Zahlungen für hervorgehobene Inserate sowie <strong>OpenAI</strong> und <strong>Anthropic</strong> zur maschinellen Bearbeitung von Inseratstexten, die die Redaktion von anderen Kleinanzeigenportalen übernimmt. Die Wettervorhersage ruft unser Server bei <strong>MET Norway</strong> (Norwegisches Meteorologisches Institut) ab; wenn Sie per Klick eine Vorhersage für Ihr Feld anfordern, übermitteln wir dorthin nur die auf etwa 1 km gerundeten Koordinaten, nicht Ihre IP-Adresse (den Standort speichert nur Ihr Browser).</p>
     <p>Wir verkaufen Ihre personenbezogenen Daten nicht und geben sie nicht zu Marketingzwecken an Dritte weiter.</p>
@@ -608,12 +732,24 @@ const meta = META[locale] ?? META.cs;
     </p>
 
     <h2>9. Cookies</h2>
-    <p><strong>Technisch notwendige Cookies</strong> (Anmeldung, Abstimmungen in Umfragen und im Fotowettbewerb) werden immer verwendet — ohne sie funktioniert die Website nicht. Ihre Entscheidung zur Einwilligung speichert die Website im Browser-Speicher (<code>localStorage</code>), nicht in einem Cookie.</p>
+    <p><strong>Technisch notwendige Cookies</strong> werden immer verwendet — ohne sie würde die Website nicht funktionieren oder man könnte nicht zuverlässig abstimmen. Ihre Entscheidung zur Einwilligung speichert die Website im Browser-Speicher (<code>localStorage</code>), nicht in einem Cookie. Wir setzen folgende eigene Cookies:</p>
+    <table class="legal-table">
+      <thead>
+        <tr><th>Cookie</th><th>Wozu es dient und wann es entsteht</th><th>Gültigkeit</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>sb-access-token</code>, <code>sb-refresh-token</code></td><td>Anmeldung im Gebrauchtmarkt; entsteht nach der Anmeldung</td><td>7 Tage</td></tr>
+        <tr><td><code>av_…</code> (nach dem Unterstrich der Name der Umfrage)</td><td>merkt sich, dass aus diesem Browser bereits in der jeweiligen Umfrage abgestimmt wurde; entsteht nach der Abstimmung</td><td>30 Tage</td></tr>
+        <tr><td><code>contest_voter_id</code></td><td>erkennt die verifizierte abstimmende Person im Fotowettbewerb; entsteht nach der Bestätigung der E-Mail-Adresse</td><td>bis zum Ende der Abstimmung in der jeweiligen Runde</td></tr>
+        <tr><td><code>bv_…</code> (nach dem Unterstrich die Inseratsnummer)</td><td>Zähler für Inseratsaufrufe im Gebrauchtmarkt: enthält nichts über Sie, nur eine Markierung, dass das Inserat in diesem Browser kürzlich aufgerufen wurde, damit erneutes Laden nicht mitgezählt wird; entsteht beim Aufruf eines Inserats, auch vor der Einwilligung</td><td>30 Minuten</td></tr>
+      </tbody>
+    </table>
     <p><strong>Analyse-Cookies</strong> — Google Analytics 4 (<code>_ga</code>, <code>_ga_*</code>) und Microsoft Clarity (<code>_clck</code>, <code>_clsk</code>) — werden <strong>ausschließlich mit Ihrer Einwilligung</strong> geladen. Sie messen die Besuchsstatistik und die Bewegung auf der Seite. Speicherdauer: <code>_ga</code> und <code>_ga_*</code> bis zu 2 Jahre, <code>_clck</code> 1 Jahr, <code>_clsk</code> 1 Tag. Wählen Sie „Nur notwendige", wird kein Messskript (Google oder Microsoft) geladen und deren Cookies werden aus dem Browser gelöscht.</p>
+    <p>Cookies, die Microsoft Clarity auf eigenen Domains von Microsoft speichern würde (z. B. <code>MUID</code>, <code>CLID</code>, <code>ANONCHK</code>, <code>SM</code>), können wir von unserer Website aus nicht löschen; Sie entfernen sie in den Browser-Einstellungen.</p>
     <p>Wir verwenden keine Marketing- oder Werbe-Cookies Dritter.</p>
     <p>Ihre Einwilligung können Sie jederzeit über den Link <strong>Cookie-Einstellungen</strong> in der Fußzeile widerrufen — der Widerruf ist ebenso einfach wie die Erteilung (Art. 7 Abs. 3 DSGVO).</p>
 
-    <p class="effective"><strong>Datum des Inkrafttretens:</strong> 17. Oktober 2026</p>
+    <p class="effective"><strong>Datum des Inkrafttretens:</strong> 17. Oktober 2026 · <strong>Letzte Änderung:</strong> 21. November 2026</p>
     </Fragment>
   ) : (
     <Fragment>
@@ -642,6 +778,7 @@ const meta = META[locale] ?? META.cs;
       <li>Telefon (kontakt na inzerent)</li>
       <li>Lokalita (město/kraj)</li>
       <li>Heslo (hashované, nikdy v plain textu)</li>
+      <li>Při přihlášení přes Google: e-mail a jméno z vašeho účtu Google (heslo ke Googlu nevidíme)</li>
     </ul>
 
     <h3>2.3 Bazar — inzeráty</h3>
@@ -657,10 +794,26 @@ const meta = META[locale] ?? META.cs;
       <li>Otisk (hash) IP adresy odesílatele — ochrana formuláře proti zneužití</li>
     </ul>
 
-    <h3>2.5 Fotosoutěž</h3>
+    <h3>2.5 Převzaté inzeráty z jiných inzertních serverů</h3>
+    <p>Redakce někdy převezme veřejný inzerát prodejce zemědělské techniky z jiného inzertního serveru (například z Bazoše) a připraví z něj <strong>neveřejný koncept</strong> inzerátu v našem bazaru. Údaje proto nezískáváme od vás, ale z veřejného inzerátu (informace podle čl. 14 GDPR). Ukládáme:</p>
+    <ul>
+      <li>jméno a telefon prodejce uvedené v inzerátu, odkaz na původní inzerát a e-mail, pokud ho redakce doplní</li>
+      <li>text inzerátu a jeho strojový přepis (OpenAI, Anthropic); fotky nepřebíráme, zůstávají u prodejce</li>
+    </ul>
+    <p>Prodejci pošleme e-mailem nebo přes WhatsApp odkaz, na kterém může koncept zveřejnit, nebo ho smazat. Zveřejní se teprve po jeho potvrzení; při potvrzení uložíme čas, IP adresu a verzi podmínek použití. Pokud nechcete, abychom váš kontakt uchovávali, napište na <a href="mailto:info@samecdigital.com">info@samecdigital.com</a> — záznam i koncept smažeme.</p>
+
+    <h3>2.6 Kalendář akcí — nahlášení akce</h3>
+    <ul>
+      <li>E-mail toho, kdo akci nahlásí (povinný): nezveřejňuje se, použijeme ho k potvrzení přijetí a ke sdělení, zda akci zveřejníme</li>
+      <li>Telefon (volitelný): pokud ho vyplníte, <strong>zveřejní se u akce</strong> po schválení</li>
+      <li>Název a popis akce, místo konání, pořadatel, web, vstupné a případné fotky — zveřejní se u akce po schválení</li>
+      <li>IP adresa — jen k omezení počtu nahraných fotek (nejvýše 10 za hodinu); do databáze se neukládá</li>
+    </ul>
+
+    <h3>2.7 Fotosoutěž</h3>
     <p>Pro fotosoutěž platí samostatné <a href="/fotosoutez/gdpr/">zásady zpracování</a>.</p>
 
-    <h3>2.6 Kontaktní formulář</h3>
+    <h3>2.8 Kontaktní formulář</h3>
     <ul>
       <li>E-mailová adresa (abychom vám mohli odpovědět)</li>
       <li>Jméno, pokud ho uvedete</li>
@@ -669,7 +822,7 @@ const meta = META[locale] ?? META.cs;
     </ul>
     <p>Zprávu neukládáme do databáze; doručí se e-mailem do naší schránky info@samecdigital.com. Na adresu z formuláře neposíláme nic jiného než odpověď.</p>
 
-    <h3>2.7 Technické údaje (všichni návštěvníci)</h3>
+    <h3>2.9 Technické údaje (všichni návštěvníci)</h3>
     <ul>
       <li>IP adresa (anonymizovaná v logu, anti-fraud, max 30 dní)</li>
       <li>User-agent prohlížeče (statistika, debugging)</li>
@@ -686,6 +839,8 @@ const meta = META[locale] ?? META.cs;
         <tr><td>Provoz uživatelského účtu (bazar)</td><td>Plnění smlouvy — odst. 1 písm. b)</td></tr>
         <tr><td>Zveřejňování inzerátů</td><td>Plnění smlouvy — odst. 1 písm. b)</td></tr>
         <tr><td>Měření návštěvnosti (Google Analytics, Microsoft Clarity)</td><td>Souhlas — odst. 1 písm. a)</td></tr>
+        <tr><td>Zveřejnění akce v kalendáři na vaši žádost, potvrzení přijetí a sdělení rozhodnutí o zveřejnění</td><td>Plnění smlouvy — odst. 1 písm. b)</td></tr>
+        <tr><td>Uložení kontaktu prodejce z veřejného inzerátu a nabídka, aby si inzerát převzal do bazaru (viz 2.5)</td><td>Oprávněný zájem — odst. 1 písm. f) (nabídnout prodejci zveřejnění jeho nabídky v bazaru)</td></tr>
         <tr><td>Anti-fraud, bezpečnost provozu</td><td>Oprávněný zájem — odst. 1 písm. f)</td></tr>
         <tr><td>Plnění zákonných povinností (účetnictví u placených služeb)</td><td>Právní povinnost — odst. 1 písm. c)</td></tr>
         <tr><td>Vyřízení oznámení závadného obsahu v bazaru (DSA čl. 16) včetně potvrzení o přijetí a sdělení rozhodnutí</td><td>Právní povinnost — odst. 1 písm. c)</td></tr>
@@ -705,6 +860,8 @@ const meta = META[locale] ?? META.cs;
       <li><strong>IP adresy z anti-fraudu</strong> (pokusy o zadání kódu): nejvýše 30 dní.</li>
       <li><strong>Oznámení závadného inzerátu:</strong> jméno a e-mail oznamovatele 6 měsíců od sdělení rozhodnutí (po tu dobu se proti němu můžete ohradit), poté je mažeme; otisk IP adresy 90 dní.</li>
       <li><strong>Zprávy z kontaktního formuláře:</strong> v e-mailové schránce po dobu vyřízení, poté nejdéle 2 roky od poslední komunikace; týká-li se zpráva uplatnění nebo obhajoby právních nároků (např. stížnost na porušení práv), do skončení věci.</li>
+      <li><strong>Kalendář akcí:</strong> e-mail a telefon toho, kdo akci nahlásil, uchováváme, dokud akci z kalendáře nesmažeme; po jejím skončení je automaticky nemažeme. Na vaši žádost je smažeme dříve.</li>
+      <li><strong>Převzaté inzeráty:</strong> odkaz k převzetí platí 30 dní. Kontakt, koncept inzerátu ani záznam o potvrzení (čas, IP adresa, verze podmínek) automaticky nemažeme; smažeme je na vaši žádost a prodejce může koncept smazat sám odkazem, který od nás dostal.</li>
       <li><strong>Provozní logy</strong> vznikají u poskytovatelů infrastruktury
         (Cloudflare, hosting) a řídí se jejich lhůtami, ne našimi.</li>
     </ul>
@@ -717,6 +874,7 @@ const meta = META[locale] ?? META.cs;
       <li><strong>Google Ireland Limited</strong> (Irsko) — Google Analytics 4 (měřicí ID G-HC3JY466RR), statistika návštěvnosti; cookies <code>_ga</code> a <code>_ga_*</code> ukládají náhodný identifikátor prohlížeče až na 2 roky. Načte se <strong>až po vašem souhlasu</strong>. Prohlížeč přitom Googlu předá vaši IP adresu; podle Googlu Google Analytics 4 IP adresy neukládá. Přenos do USA na základě rámce EU–US Data Privacy Framework a SCC.</li>
       <li><strong>Microsoft Ireland Operations Limited</strong> (Irsko) — Microsoft Clarity (ID projektu ws6puxcjnb), heatmapy a záznamy návštěv (pohyb myši, kliknutí, posouvání). Načte se <strong>až po vašem souhlasu</strong>. Přenos do USA na základě rámce EU–US Data Privacy Framework a SCC.</li>
       <li><strong>Google Ireland Limited</strong> (Irsko) — přehrávač YouTube (<code>youtube-nocookie.com</code>) u videí v katalogu techniky a v encyklopedii. Načte se <strong>až po kliknutí</strong> na video, do té doby se z YouTube nenačítá nic. Google přitom dostane vaši IP adresu, přehrávač ukládá data do úložiště prohlížeče (<code>localStorage</code>, IndexedDB) a data mohou jít do USA (EU–US Data Privacy Framework).</li>
+      <li><strong>Google Ireland Limited</strong> (Irsko) — přihlášení do bazaru přes Google. Spustí se <strong>až po kliknutí</strong> na tlačítko; do té doby se z Googlu nenačítá nic. Google přitom dostane vaši IP adresu a údaj, že se přihlašujete k agro-svet.cz; my od něj dostaneme váš e-mail a jméno. Přenos do USA na základě rámce EU–US Data Privacy Framework a SCC.</li>
     </ul>
     <p>Na některých stránkách se váš prohlížeč připojuje přímo k dalším službám, které tím dostanou vaši IP adresu: <strong>OpenStreetMap</strong> (mapové podklady v bazaru a u farem), <strong>Cloudflare Turnstile</strong> (ochrana formulářů před roboty) a <strong>Unsplash</strong> (obrázky v sekci Média). Server navíc používá <strong>Nominatim / OpenStreetMap</strong> k převodu lokality inzerátu na souřadnice, <strong>Fio banku</strong> k párování plateb za zvýhodnění inzerátu a služby <strong>OpenAI</strong> a <strong>Anthropic</strong> ke strojovému zpracování textu inzerátů, které redakce převezme z jiných inzertních serverů. Předpověď počasí stahuje náš server od <strong>MET Norway</strong> (Norský meteorologický institut); když o předpověď pro své pole kliknutím požádáte, předáme mu jen souřadnice zaokrouhlené zhruba na 1 km, ne vaši IP adresu (polohu si pamatuje jen váš prohlížeč).</p>
     <p>Vaše osobní údaje neprodáváme ani nepředáváme třetím stranám pro marketingové účely.</p>
@@ -750,12 +908,24 @@ const meta = META[locale] ?? META.cs;
     </p>
 
     <h2>9. Cookies</h2>
-    <p><strong>Technicky nezbytné cookies</strong> (přihlášení, hlasování v anketách a ve fotosoutěži) se používají vždy — bez nich web nefunguje. Vaši volbu o souhlasu si web pamatuje v úložišti prohlížeče (<code>localStorage</code>), ne v cookie.</p>
+    <p><strong>Technicky nezbytné cookies</strong> se používají vždy — bez nich by web nefungoval nebo by nešlo spolehlivě hlasovat. Vaši volbu o souhlasu si web pamatuje v úložišti prohlížeče (<code>localStorage</code>), ne v cookie. Nastavujeme tyto vlastní cookies:</p>
+    <table class="legal-table">
+      <thead>
+        <tr><th>Cookie</th><th>K čemu slouží a kdy vznikne</th><th>Platnost</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>sb-access-token</code>, <code>sb-refresh-token</code></td><td>přihlášení do bazaru; vznikne po přihlášení</td><td>7 dní</td></tr>
+        <tr><td><code>av_…</code> (za podtržítkem název ankety)</td><td>zapamatuje, že z tohoto prohlížeče už v dané anketě hlasovali; vznikne po hlasování</td><td>30 dní</td></tr>
+        <tr><td><code>contest_voter_id</code></td><td>identifikuje ověřeného hlasujícího ve fotosoutěži; vznikne po ověření e-mailu</td><td>do konce hlasování v daném kole</td></tr>
+        <tr><td><code>bv_…</code> (za podtržítkem číslo inzerátu)</td><td>počítadlo zobrazení inzerátu v bazaru: nenese nic o vás, jen značku, že byl inzerát v tomto prohlížeči nedávno zobrazen, aby se opakované načtení nepočítalo; vznikne při zobrazení inzerátu, i před udělením souhlasu</td><td>30 minut</td></tr>
+      </tbody>
+    </table>
     <p><strong>Analytické cookies</strong> — Google Analytics 4 (<code>_ga</code>, <code>_ga_*</code>) a Microsoft Clarity (<code>_clck</code>, <code>_clsk</code>) — se načtou <strong>jen s vaším souhlasem</strong>. Měří návštěvnost a to, jak se po stránce pohybujete. Doba uložení: <code>_ga</code> a <code>_ga_*</code> až 2 roky, <code>_clck</code> 1 rok, <code>_clsk</code> 1 den. Pokud zvolíte „Pouze nezbytné", nenačte se žádný měřicí skript (Google ani Microsoft) a jejich cookies se z prohlížeče smažou.</p>
+    <p>Cookies, které by Microsoft Clarity uložil na vlastních doménách Microsoftu (například <code>MUID</code>, <code>CLID</code>, <code>ANONCHK</code>, <code>SM</code>), z našeho webu smazat neumíme; zrušíte je v nastavení prohlížeče.</p>
     <p>Nepoužíváme marketingové ani reklamní cookies třetích stran.</p>
     <p>Souhlas můžete kdykoli odvolat odkazem <strong>Nastavení cookies</strong> v patičce — odvolání je stejně snadné jako udělení (čl. 7 odst. 3 GDPR).</p>
 
-    <p class="effective"><strong>Účinnost:</strong> 17. října 2026</p>
+    <p class="effective"><strong>Účinnost:</strong> 17. října 2026 · <strong>Poslední úprava:</strong> 21. listopadu 2026</p>
     </Fragment>
   )}
   </div>
