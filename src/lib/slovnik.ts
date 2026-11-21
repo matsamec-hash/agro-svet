@@ -2070,7 +2070,7 @@ Aplikace:
 - **Postřikovač s trubkovými tryskami** (ne klasické rozprašovače — DAM by spálil list).
 - **Hnojivová sada na postřikovači** — speciální 5–7 paprskové trysky střelí kapalinu mezi řádky.
 - **Dávkování** 100–250 l/ha (= 39–98 kg N/ha).
-- **Časy aplikace**: jarní vzcházení obilovin, druhá dávka na kvetení, případně listové hnojení (5–15 l/ha v poredění).
+- **Časy aplikace**: jarní vzcházení obilovin, druhá dávka na kvetení, případně listové hnojení (5–15 l/ha v ředění).
 
 Výhody:
 - **Rovnoměrnost** — žádné rozpadlé granule, plynulý spray.
@@ -3262,8 +3262,8 @@ Viz též [[no-till]], [[orba]], [[regenerativni-zemedelstvi]], [[ctf]], [[gps-r
     term: 'Biouhel (biochar)',
     alias: ['biochar', 'agrouhel', 'pyrouhel'],
     kategorie: 'hnojivo',
-    shortDef: 'Biouhel je porézní uhlí získané pyrolýzou biomasy (dřeva, slámy, rostlinných zbytků) bez kyslíku. Přidává se do půdy pro zlepšení jejích vlastností, vázání živin a dlouhodobou sekvestraci uhlíku (1000+ let).',
-    longDef: `Biouhel (anglicky *biochar*, řec. *bios* + *char* = život + uhlí) je **uhlíkatý materiál vyrobený pyrolýzou** (zahřátím bez kyslíku) biomasy — dřevěné štěpky, sláma, slupky, hnůj, ovocné pecky. Vyzařuje **75–90 % uhlíku** z původní biomasy, který je v půdě **stabilní stovky až tisíce let** — proto silný nástroj sekvestrace CO₂.
+    shortDef: 'Biouhel je porézní uhlí získané pyrolýzou biomasy (dřeva, slámy, rostlinných zbytků) bez kyslíku. Přidává se do půdy pro zlepšení jejích vlastností, vázání živin a dlouhodobou sekvestraci uhlíku (stovky let).',
+    longDef: `Biouhel (anglicky *biochar*, řec. *bios* + *char* = život + uhlí) je **uhlíkatý materiál vyrobený pyrolýzou** (zahřátím bez kyslíku) biomasy — dřevěné štěpky, sláma, slupky, hnůj, ovocné pecky. Při pomalé pyrolýze v něm zůstane zhruba **polovina uhlíku** z původní biomasy (Lehmann a kol. 2006; záleží hlavně na surovině) a převážná část z něj je v půdě **stabilní stovky let** (metaanalýza Wang a kol. 2016: 97 % uhlíku biouhlu s průměrnou dobou setrvání ~556 let) — proto nástroj sekvestrace CO₂.
 
 **Vznik a inspirace — *Terra Preta*:**
 V Amazonii (Brazílie) byly objeveny **temně černé úrodné půdy** *Terra Preta de Índio* obsahující až 80 t/ha biouhle ze starých indiánských ohnišť. **Stáří 500–2000 let**, dodnes mnohonásobně úrodnější než okolní červené latosoly. Inspirace pro moderní biochar.
@@ -3287,10 +3287,10 @@ V Amazonii (Brazílie) byly objeveny **temně černé úrodné půdy** *Terra Pr
 
 **Efekt na půdě:**
 1. **Porozita** — 1 g biouhle = 200–400 m² povrchu (jako aktivní uhlí). Drží vodu i živiny.
-2. **CEC** (Cation Exchange Capacity) — biouhel váže kationy (Ca²⁺, Mg²⁺, K⁺, NH₄⁺), pomalu je uvolňuje plodině. **+30–80 % CEC** v písčitých půdách.
+2. **CEC** (Cation Exchange Capacity) — biouhel váže kationy (Ca²⁺, Mg²⁺, K⁺, NH₄⁺), pomalu je uvolňuje plodině. Metaanalýza 59 studií (Singh a kol. 2022) zjistila průměrný nárůst CEC o ~20 %; velikost efektu záleží na surovině, teplotě pyrolýzy a půdě.
 3. **pH** — biouhel je mírně alkalický (pH 8–10) → **stabilizuje kyselé půdy**, alternativa vápnění.
-4. **Mikrobiom** — póry biouhle jsou ideální „domovy" pro půdní bakterie a houby. **+30–60 % biomasy mikroorganismů**.
-5. **Voda** — 1 t biouhle zadržuje **2–4 t vody** v půdě → ochrana proti suchu.
+4. **Mikrobiom** — póry biouhle jsou ideální „domovy" pro půdní bakterie a houby. Metaanalýza 72 prací (Pokharel a kol. 2020) zjistila v průměru **+21,7 % uhlíku v mikrobiální biomase**; efekt byl větší v kyselých půdách (pH < 6,5) a v půdách chudých na uhlík a dusík.
+5. **Voda** — Metaanalýza Razzaghi a kol. (2020) zjistila, že biouhel zvýšil **využitelnou vodu pro rostliny o 45 %** v lehkých půdách, o 21 % ve středních a o 14 % v těžkých; objemovou hmotnost půdy snížil v průměru o 9 %.
 6. **Sekvestrace C** — 1 t biouhle = ~3 t CO₂ ekvivalent, stabilní 500+ let.
 
 **Aplikace:**
@@ -5948,7 +5948,6 @@ Viz též [[psenice-ozima]], [[oves-jarni]], [[ozim-jarin]], [[rzi]], [[hektolit
 
 **Výnosy:**
 - **Průměr CZ**: 3,5 t/ha
-- **Top farmy**: 6+ t/ha
 
 **Použití:**
 
@@ -6003,7 +6002,7 @@ Viz též [[psenice-ozima]], [[oves-jarni]], [[ozim-jarin]], [[rzi]], [[hektolit
 - **Plus přímé platby** (BISS, redistributivní platba, ekoplatba): dělají z toho výhodnější plodinu
 
 **Trh a trendy:**
-- **Plant-based revolution** — ovesné mléko = 2x růst spotřeby 2020s
+- **Plant-based trend** — ovesné mléko patří mezi rostlinné náhrady mléka; spolehlivé číslo o růstu jeho spotřeby nemáme
 - **Oat milk vs almond milk** — oat má lepší enviromentální stopu, šíření v EU
 
 Viz též [[psenice-ozima]], [[zito-ozime]], [[ozim-jarin]], [[hektolitr]], [[mezi-plodiny]].`,
