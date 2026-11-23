@@ -108,6 +108,7 @@ const meta = META[locale] ?? META.cs;
         <tr><td>Prevádzka používateľského účtu (bazár)</td><td>Plnenie zmluvy — ods. 1 písm. b)</td></tr>
         <tr><td>Zverejňovanie inzerátov</td><td>Plnenie zmluvy — ods. 1 písm. b)</td></tr>
         <tr><td>Meranie návštevnosti (Google Analytics, Microsoft Clarity)</td><td>Súhlas — ods. 1 písm. a)</td></tr>
+        <tr><td>Anonymné počítanie návštev bez cookies (vlastné Umami)</td><td>Oprávnený záujem — ods. 1 písm. f) (vedieť, koľko ľudí web číta a ktoré stránky)</td></tr>
         <tr><td>Zverejnenie akcie v kalendári na vašu žiadosť, potvrdenie prijatia a oznámenie rozhodnutia o zverejnení</td><td>Plnenie zmluvy — ods. 1 písm. b)</td></tr>
         <tr><td>Uloženie kontaktu predajcu z verejného inzerátu a ponuka, aby si inzerát prevzal do bazára (pozri 2.5)</td><td>Oprávnený záujem — ods. 1 písm. f) (ponúknuť predajcovi zverejnenie jeho ponuky v bazári)</td></tr>
         <tr><td>Anti-fraud, bezpečnosť prevádzky</td><td>Oprávnený záujem — ods. 1 písm. f)</td></tr>
@@ -142,6 +143,7 @@ const meta = META[locale] ?? META.cs;
       <li><strong>Resend, Inc.</strong> (USA) — odosielanie transakčných a newsletter e-mailov a doručovanie správ z kontaktného formulára do našej schránky. SCC.</li>
       <li><strong>Google Ireland Limited</strong> (Írsko) — Google Analytics 4 (ID merania G-HC3JY466RR), štatistika návštevnosti; cookies <code>_ga</code> a <code>_ga_*</code> ukladajú náhodný identifikátor prehliadača až na 2 roky. Načíta sa <strong>až po vašom súhlase</strong>. Prehliadač pritom Googlu odovzdá vašu IP adresu; podľa Googlu Google Analytics 4 IP adresy neukladá. Prenos do USA na základe rámca EU–US Data Privacy Framework a SCC.</li>
       <li><strong>Microsoft Ireland Operations Limited</strong> (Írsko) — Microsoft Clarity (ID projektu ws6puxcjnb), heatmapy a záznamy návštev (pohyb myši, kliknutia, posúvanie). Načíta sa <strong>až po vašom súhlase</strong>. Prenos do USA na základe rámca EU–US Data Privacy Framework a SCC.</li>
+      <li><strong>Umami (vlastné meranie návštevnosti)</strong> — beží na našom vlastnom serveri (<code>analytika.samecdigital.com</code>), nie u tretej strany; údaje nikam neodovzdávame. Nepoužíva cookies ani iné úložisko v prehliadači. Ukladá anonymné údaje o návšteve: adresu stránky, odkiaľ ste prišli, typ zariadenia, prehliadač a operačný systém, jazyk a približnú polohu (štát, región, mesto). IP adresu neukladá; z nej, z prehliadača a z pravidelne sa meniacej soli sa vypočíta jednosmerný odtlačok, z ktorého sa spätne nedá zistiť, kto ste. Načíta sa vždy, aj keď zvolíte „Iba nevyhnutné".</li>
       <li><strong>Google Ireland Limited</strong> (Írsko) — prehrávač YouTube (<code>youtube-nocookie.com</code>) pri videách v katalógu techniky a v encyklopédii. Načíta sa <strong>až po kliknutí</strong> na video, dovtedy sa z YouTube nenačíta nič. Google pritom dostane vašu IP adresu, prehrávač ukladá údaje do úložiska prehliadača (<code>localStorage</code>, IndexedDB) a údaje môžu ísť do USA (EU–US Data Privacy Framework).</li>
       <li><strong>Google Ireland Limited</strong> (Írsko) — prihlásenie do bazára cez Google. Spustí sa <strong>až po kliknutí</strong> na tlačidlo; dovtedy sa z Googlu nenačíta nič. Google pritom dostane vašu IP adresu a údaj, že sa prihlasujete na agro-svet.cz; my od neho dostaneme váš e-mail a meno. Prenos do USA na základe rámca EU–US Data Privacy Framework a SCC.</li>
     </ul>
@@ -160,7 +162,7 @@ const meta = META[locale] ?? META.cs;
       <li><strong>Odvolanie súhlasu</strong> kedykoľvek (čl. 7 ods. 3) — týka sa merania návštevnosti (odkaz <strong>Nastavenia cookies</strong> v pätičke) a newslettera</li>
     </ul>
     <p>Žiadosť zašlite na <a href="mailto:info@samecdigital.com">info@samecdigital.com</a>. Vybavíme ju bez zbytočného odkladu, najneskôr do jedného mesiaca (čl. 12 ods. 3 GDPR).</p>
-    <p><strong>Právo namietať (čl. 21 GDPR):</strong> Ak údaje spracúvame na základe oprávneného záujmu (anti-fraud, bezpečnosť prevádzky), môžete proti tomuto spracúvaniu kedykoľvek namietať z dôvodov týkajúcich sa vašej konkrétnej situácie. Automatizované rozhodovanie vrátane profilovania v zmysle čl. 22 GDPR nevykonávame.</p>
+    <p><strong>Právo namietať (čl. 21 GDPR):</strong> Ak údaje spracúvame na základe oprávneného záujmu (anti-fraud, bezpečnosť prevádzky, anonymné počítanie návštev), môžete proti tomuto spracúvaniu kedykoľvek namietať z dôvodov týkajúcich sa vašej konkrétnej situácie. Automatizované rozhodovanie vrátane profilovania v zmysle čl. 22 GDPR nevykonávame.</p>
 
     <h2>7. Odhlásenie z newslettera</h2>
     <p>Odber newslettera môžete kedykoľvek odhlásiť:</p>
@@ -195,10 +197,11 @@ const meta = META[locale] ?? META.cs;
     </table>
     <p><strong>Analytické cookies</strong> — Google Analytics 4 (<code>_ga</code>, <code>_ga_*</code>) a Microsoft Clarity (<code>_clck</code>, <code>_clsk</code>) — sa načítajú <strong>len s vaším súhlasom</strong>. Merajú návštevnosť a to, ako sa po stránke pohybujete. Doba uloženia: <code>_ga</code> a <code>_ga_*</code> až 2 roky, <code>_clck</code> 1 rok, <code>_clsk</code> 1 deň. Ak zvolíte „Iba nevyhnutné", nenačíta sa žiadny merací skript (Google ani Microsoft) a ich cookies sa z prehliadača vymažú.</p>
     <p>Cookies, ktoré by Microsoft Clarity uložil na vlastných doménach Microsoftu (napríklad <code>MUID</code>, <code>CLID</code>, <code>ANONCHK</code>, <code>SM</code>), z nášho webu zmazať nevieme; zrušíte ich v nastaveniach prehliadača.</p>
+    <p>Vlastné meranie <strong>Umami</strong> nepoužíva cookies ani úložisko prehliadača, a preto sa spúšťa vždy — odmietnutie analytických cookies sa ho netýka.</p>
     <p>Nepoužívame marketingové ani reklamné cookies tretích strán.</p>
     <p>Súhlas môžete kedykoľvek odvolať odkazom <strong>Nastavenia cookies</strong> v pätičke — odvolanie je rovnako jednoduché ako udelenie (čl. 7 ods. 3 GDPR).</p>
 
-    <p class="effective"><strong>Účinnosť:</strong> 17. októbra 2026 · <strong>Posledná úprava:</strong> 21. novembra 2026</p>
+    <p class="effective"><strong>Účinnosť:</strong> 17. októbra 2026 · <strong>Posledná úprava:</strong> 23. novembra 2026</p>
     </Fragment>
   ) : isPl ? (
     <Fragment>
@@ -288,6 +291,7 @@ const meta = META[locale] ?? META.cs;
         <tr><td>Prowadzenie konta użytkownika (bazar)</td><td>Wykonanie umowy — ust. 1 lit. b)</td></tr>
         <tr><td>Publikowanie ogłoszeń</td><td>Wykonanie umowy — ust. 1 lit. b)</td></tr>
         <tr><td>Pomiar ruchu (Google Analytics, Microsoft Clarity)</td><td>Zgoda — ust. 1 lit. a)</td></tr>
+        <tr><td>Anonimowe liczenie odwiedzin bez plików cookie (własne Umami)</td><td>Prawnie uzasadniony interes — ust. 1 lit. f) (wiedzieć, ilu osobom serwis się przydaje i które strony czytają)</td></tr>
         <tr><td>Publikacja wydarzenia w kalendarzu na Twoją prośbę, potwierdzenie przyjęcia i poinformowanie o decyzji</td><td>Wykonanie umowy — ust. 1 lit. b)</td></tr>
         <tr><td>Zapisanie kontaktu sprzedawcy z publicznego ogłoszenia i propozycja przejęcia ogłoszenia do bazaru (zob. 2.5)</td><td>Prawnie uzasadniony interes — ust. 1 lit. f) (zaproponowanie sprzedawcy publikacji jego oferty w bazarze)</td></tr>
         <tr><td>Anti-fraud, bezpieczeństwo działania</td><td>Prawnie uzasadniony interes — ust. 1 lit. f)</td></tr>
@@ -322,6 +326,7 @@ const meta = META[locale] ?? META.cs;
       <li><strong>Resend, Inc.</strong> (USA) — wysyłka e-maili transakcyjnych i newsletterowych oraz dostarczanie wiadomości z formularza kontaktowego do naszej skrzynki. SCC.</li>
       <li><strong>Google Ireland Limited</strong> (Irlandia) — Google Analytics 4 (identyfikator pomiaru G-HC3JY466RR), statystyka odwiedzin; pliki cookie <code>_ga</code> i <code>_ga_*</code> przechowują losowy identyfikator przeglądarki do 2 lat. Ładuje się <strong>dopiero po Twojej zgodzie</strong>. Przeglądarka przekazuje przy tym Google Twój adres IP; według Google Google Analytics 4 nie przechowuje adresów IP. Transfer do USA na podstawie EU–US Data Privacy Framework i SCC.</li>
       <li><strong>Microsoft Ireland Operations Limited</strong> (Irlandia) — Microsoft Clarity (identyfikator projektu ws6puxcjnb), mapy ciepła i nagrania wizyt (ruch myszy, kliknięcia, przewijanie). Ładuje się <strong>dopiero po Twojej zgodzie</strong>. Transfer do USA na podstawie EU–US Data Privacy Framework i SCC.</li>
+      <li><strong>Umami (własny pomiar odwiedzin)</strong> — działa na naszym własnym serwerze (<code>analytika.samecdigital.com</code>), nie u strony trzeciej; danych nikomu nie przekazujemy. Nie używa plików cookie ani innej pamięci przeglądarki. Zapisuje anonimowe dane o wizycie: adres strony, skąd przychodzisz, typ urządzenia, przeglądarkę i system operacyjny, język oraz przybliżoną lokalizację (kraj, region, miasto). Adresu IP nie zapisuje; z niego, z przeglądarki i z regularnie zmienianej soli liczony jest jednokierunkowy skrót, z którego nie da się wstecz ustalić, kim jesteś. Ładuje się zawsze, także gdy wybierzesz „Tylko niezbędne".</li>
       <li><strong>Google Ireland Limited</strong> (Irlandia) — odtwarzacz YouTube (<code>youtube-nocookie.com</code>) przy filmach w katalogu maszyn i w encyklopedii. Ładuje się <strong>dopiero po kliknięciu</strong> w film; wcześniej nic nie jest pobierane z YouTube. Google otrzymuje przy tym Twój adres IP, odtwarzacz zapisuje dane w pamięci przeglądarki (<code>localStorage</code>, IndexedDB), a dane mogą trafić do USA (EU–US Data Privacy Framework).</li>
       <li><strong>Google Ireland Limited</strong> (Irlandia) — logowanie do bazaru przez Google. Uruchamia się <strong>dopiero po kliknięciu</strong> przycisku; wcześniej nic nie jest pobierane z Google. Google otrzymuje przy tym Twój adres IP i informację, że logujesz się do agro-svet.cz; od Google otrzymujemy Twój e-mail i imię. Transfer do USA na podstawie EU–US Data Privacy Framework i SCC.</li>
     </ul>
@@ -340,7 +345,7 @@ const meta = META[locale] ?? META.cs;
       <li><strong>Cofnięcia zgody</strong> w dowolnym momencie (art. 7 ust. 3) — dotyczy pomiaru ruchu (link <strong>Ustawienia plików cookie</strong> w stopce) i newslettera</li>
     </ul>
     <p>Wniosek wyślij na <a href="mailto:info@samecdigital.com">info@samecdigital.com</a>. Rozpatrzymy go niezwłocznie, najpóźniej w ciągu miesiąca (art. 12 ust. 3 RODO).</p>
-    <p><strong>Prawo sprzeciwu (art. 21 RODO):</strong> Jeśli przetwarzamy dane na podstawie prawnie uzasadnionego interesu (anti-fraud, bezpieczeństwo działania), możesz w każdej chwili wnieść sprzeciw wobec takiego przetwarzania z przyczyn związanych z Twoją szczególną sytuacją. Nie podejmujemy zautomatyzowanych decyzji, w tym nie stosujemy profilowania w rozumieniu art. 22 RODO.</p>
+    <p><strong>Prawo sprzeciwu (art. 21 RODO):</strong> Jeśli przetwarzamy dane na podstawie prawnie uzasadnionego interesu (anti-fraud, bezpieczeństwo działania, anonimowe liczenie odwiedzin), możesz w każdej chwili wnieść sprzeciw wobec takiego przetwarzania z przyczyn związanych z Twoją szczególną sytuacją. Nie podejmujemy zautomatyzowanych decyzji, w tym nie stosujemy profilowania w rozumieniu art. 22 RODO.</p>
 
     <h2>7. Wypisanie z newslettera</h2>
     <p>Subskrypcję newslettera możesz w każdej chwili anulować:</p>
@@ -375,10 +380,11 @@ const meta = META[locale] ?? META.cs;
     </table>
     <p><strong>Analityczne pliki cookie</strong> — Google Analytics 4 (<code>_ga</code>, <code>_ga_*</code>) i Microsoft Clarity (<code>_clck</code>, <code>_clsk</code>) — ładują się <strong>wyłącznie za Twoją zgodą</strong>. Mierzą statystykę odwiedzin oraz sposób poruszania się po stronie. Okres przechowywania: <code>_ga</code> i <code>_ga_*</code> do 2 lat, <code>_clck</code> 1 rok, <code>_clsk</code> 1 dzień. Jeśli wybierzesz „Tylko niezbędne", nie zostanie wczytany żaden skrypt pomiarowy (Google ani Microsoft), a ich pliki cookie zostaną usunięte z przeglądarki.</p>
     <p>Plików cookie, które Microsoft Clarity zapisałby w domenach należących do Microsoftu (np. <code>MUID</code>, <code>CLID</code>, <code>ANONCHK</code>, <code>SM</code>), nie możemy usunąć z naszego serwisu; można je usunąć w ustawieniach przeglądarki.</p>
+    <p>Własny pomiar <strong>Umami</strong> nie używa plików cookie ani pamięci przeglądarki, dlatego uruchamia się zawsze — odrzucenie analitycznych plików cookie go nie dotyczy.</p>
     <p>Nie używamy marketingowych ani reklamowych plików cookie stron trzecich.</p>
     <p>Zgodę możesz wycofać w dowolnym momencie linkiem <strong>Ustawienia plików cookie</strong> w stopce — wycofanie jest równie łatwe jak wyrażenie zgody (art. 7 ust. 3 RODO).</p>
 
-    <p class="effective"><strong>Data wejścia w życie:</strong> 17 października 2026 · <strong>Ostatnia zmiana:</strong> 21 listopada 2026</p>
+    <p class="effective"><strong>Data wejścia w życie:</strong> 17 października 2026 · <strong>Ostatnia zmiana:</strong> 23 listopada 2026</p>
     </Fragment>
   ) : isUk ? (
     <Fragment>
@@ -468,6 +474,7 @@ const meta = META[locale] ?? META.cs;
         <tr><td>Робота облікового запису користувача (барахолка)</td><td>Виконання договору — ч. 1 п. b)</td></tr>
         <tr><td>Публікація оголошень</td><td>Виконання договору — ч. 1 п. b)</td></tr>
         <tr><td>Вимірювання відвідуваності (Google Analytics, Microsoft Clarity)</td><td>Згода — ч. 1 п. a)</td></tr>
+        <tr><td>Анонімний підрахунок відвідувань без cookie (власний Umami)</td><td>Законний інтерес — ч. 1 п. f) (знати, скільки людей читає сайт і які сторінки)</td></tr>
         <tr><td>Публікація події в календарі на ваше прохання, підтвердження отримання та повідомлення про рішення</td><td>Виконання договору — ч. 1 п. b)</td></tr>
         <tr><td>Збереження контакту продавця з публічного оголошення та пропозиція перенести оголошення на барахолку (див. 2.5)</td><td>Законний інтерес — ч. 1 п. f) (запропонувати продавцю публікацію його пропозиції на барахолці)</td></tr>
         <tr><td>Anti-fraud, безпека роботи</td><td>Законний інтерес — ч. 1 п. f)</td></tr>
@@ -502,6 +509,7 @@ const meta = META[locale] ?? META.cs;
       <li><strong>Resend, Inc.</strong> (США) — надсилання транзакційних і розсилкових e-mail та доставка повідомлень із контактної форми до нашої скриньки. SCC.</li>
       <li><strong>Google Ireland Limited</strong> (Ірландія) — Google Analytics 4 (ідентифікатор вимірювання G-HC3JY466RR), статистика відвідувань; файли cookie <code>_ga</code> і <code>_ga_*</code> зберігають випадковий ідентифікатор браузера до 2 років. Завантажується <strong>лише після вашої згоди</strong>. Браузер при цьому передає Google вашу IP-адресу; за даними Google, Google Analytics 4 IP-адреси не зберігає. Передавання до США на підставі EU–US Data Privacy Framework і SCC.</li>
       <li><strong>Microsoft Ireland Operations Limited</strong> (Ірландія) — Microsoft Clarity (ідентифікатор проєкту ws6puxcjnb), теплові карти та записи відвідувань (рух миші, кліки, прокручування). Завантажується <strong>лише після вашої згоди</strong>. Передавання до США на підставі EU–US Data Privacy Framework і SCC.</li>
+      <li><strong>Umami (власне вимірювання відвідуваності)</strong> — працює на нашому власному сервері (<code>analytika.samecdigital.com</code>), а не в третьої сторони; дані нікому не передаємо. Не використовує файли cookie та інше сховище в браузері. Зберігає анонімні дані про візит: адресу сторінки, звідки ви прийшли, тип пристрою, браузер і операційну систему, мову та приблизне місцезнаходження (країна, регіон, місто). IP-адресу не зберігає; з неї, з браузера та з солі, що регулярно змінюється, обчислюється односторонній відбиток, за яким неможливо дізнатися, хто ви. Завантажується завжди, навіть якщо ви оберете «Лише необхідні».</li>
       <li><strong>Google Ireland Limited</strong> (Ірландія) — програвач YouTube (<code>youtube-nocookie.com</code>) для відео в каталозі техніки та енциклопедії. Завантажується <strong>лише після кліку</strong> на відео; до того з YouTube нічого не завантажується. Google при цьому отримує вашу IP-адресу, програвач зберігає дані в сховищі браузера (<code>localStorage</code>, IndexedDB), а дані можуть передаватися до США (EU–US Data Privacy Framework).</li>
       <li><strong>Google Ireland Limited</strong> (Ірландія) — вхід на барахолку через Google. Запускається <strong>лише після кліку</strong> на кнопку; до того з Google нічого не завантажується. Google при цьому отримує вашу IP-адресу та інформацію, що ви входите на agro-svet.cz; від нього ми отримуємо ваш e-mail та ім'я. Передача до США на підставі EU–US Data Privacy Framework і SCC.</li>
     </ul>
@@ -520,7 +528,7 @@ const meta = META[locale] ?? META.cs;
       <li><strong>Відкликання згоди</strong> будь-коли (ст. 7 ч. 3) — стосується вимірювання відвідуваності (посилання <strong>Налаштування cookie</strong> в підвалі) і розсилки</li>
     </ul>
     <p>Запит надішліть на <a href="mailto:info@samecdigital.com">info@samecdigital.com</a>. Розглянемо його без зайвої затримки, не пізніше ніж протягом одного місяця (ст. 12 ч. 3 GDPR).</p>
-    <p><strong>Право на заперечення (ст. 21 GDPR):</strong> Якщо ми обробляємо дані на підставі законного інтересу (anti-fraud, безпека роботи), ви можете будь-коли заперечити проти такої обробки з причин, пов'язаних із вашою конкретною ситуацією. Автоматизованого ухвалення рішень, зокрема профілювання у розумінні ст. 22 GDPR, ми не здійснюємо.</p>
+    <p><strong>Право на заперечення (ст. 21 GDPR):</strong> Якщо ми обробляємо дані на підставі законного інтересу (anti-fraud, безпека роботи, анонімний підрахунок відвідувань), ви можете будь-коли заперечити проти такої обробки з причин, пов'язаних із вашою конкретною ситуацією. Автоматизованого ухвалення рішень, зокрема профілювання у розумінні ст. 22 GDPR, ми не здійснюємо.</p>
 
     <h2>7. Відписка від розсилки</h2>
     <p>Підписку на розсилку ви можете будь-коли скасувати:</p>
@@ -553,10 +561,11 @@ const meta = META[locale] ?? META.cs;
     </table>
     <p><strong>Аналітичні файли cookie</strong> — Google Analytics 4 (<code>_ga</code>, <code>_ga_*</code>) і Microsoft Clarity (<code>_clck</code>, <code>_clsk</code>) — завантажуються <strong>лише за вашої згоди</strong>. Вони вимірюють відвідуваність і те, як ви рухаєтесь сторінкою. Строк зберігання: <code>_ga</code> і <code>_ga_*</code> до 2 років, <code>_clck</code> 1 рік, <code>_clsk</code> 1 день. Якщо ви оберете «Лише необхідні», не завантажиться жоден вимірювальний скрипт (Google чи Microsoft), а їхні файли cookie буде видалено з браузера.</p>
     <p>Файли cookie, які Microsoft Clarity міг би зберегти на власних доменах Microsoft (наприклад, <code>MUID</code>, <code>CLID</code>, <code>ANONCHK</code>, <code>SM</code>), ми з нашого сайту видалити не можемо; їх можна видалити в налаштуваннях браузера.</p>
+    <p>Власне вимірювання <strong>Umami</strong> не використовує файли cookie та сховище браузера, тому запускається завжди — відмова від аналітичних файлів cookie його не стосується.</p>
     <p>Ми не використовуємо маркетингові чи рекламні файли cookie третіх сторін.</p>
     <p>Згоду можна відкликати будь-коли посиланням <strong>Налаштування cookie</strong> в підвалі — відкликання таке саме просте, як і надання (ст. 7 п. 3 GDPR).</p>
 
-    <p class="effective"><strong>Дата набрання чинності:</strong> 17 жовтня 2026 · <strong>Остання зміна:</strong> 21 листопада 2026</p>
+    <p class="effective"><strong>Дата набрання чинності:</strong> 17 жовтня 2026 · <strong>Остання зміна:</strong> 23 листопада 2026</p>
     </Fragment>
   ) : isDe ? (
     <Fragment>
@@ -650,6 +659,7 @@ const meta = META[locale] ?? META.cs;
         <tr><td>Führung des Nutzerkontos (Gebrauchtmarkt)</td><td>Vertragserfüllung — Abs. 1 Buchst. b)</td></tr>
         <tr><td>Veröffentlichung von Inseraten</td><td>Vertragserfüllung — Abs. 1 Buchst. b)</td></tr>
         <tr><td>Reichweitenmessung (Google Analytics, Microsoft Clarity)</td><td>Einwilligung — Abs. 1 Buchst. a)</td></tr>
+        <tr><td>Anonyme Besuchszählung ohne Cookies (eigenes Umami)</td><td>Berechtigtes Interesse — Abs. 1 Buchst. f) (wissen, wie viele Menschen die Seite lesen und welche Seiten)</td></tr>
         <tr><td>Veröffentlichung der Veranstaltung im Terminkalender auf Ihre Bitte, Eingangsbestätigung und Mitteilung der Entscheidung</td><td>Vertragserfüllung — Abs. 1 Buchst. b)</td></tr>
         <tr><td>Speicherung des Verkäuferkontakts aus dem öffentlichen Inserat und Angebot, das Inserat in den Gebrauchtmarkt zu übernehmen (siehe 2.5)</td><td>Berechtigtes Interesse — Abs. 1 Buchst. f) (dem Verkäufer die Veröffentlichung seines Angebots im Gebrauchtmarkt anbieten)</td></tr>
         <tr><td>Betrugsprävention, Betriebssicherheit</td><td>Berechtigtes Interesse — Abs. 1 Buchst. f)</td></tr>
@@ -686,6 +696,7 @@ const meta = META[locale] ?? META.cs;
       <li><strong>Resend, Inc.</strong> (USA) — Versand von Transaktions- und Newsletter-E-Mails sowie Zustellung von Nachrichten aus dem Kontaktformular in unser Postfach. SCC.</li>
       <li><strong>Google Ireland Limited</strong> (Irland) — Google Analytics 4 (Mess-ID G-HC3JY466RR), Besuchsstatistik; die Cookies <code>_ga</code> und <code>_ga_*</code> speichern eine zufällige Kennung Ihres Browsers für bis zu 2 Jahre. Wird <strong>erst nach Ihrer Einwilligung</strong> geladen. Ihr Browser übermittelt dabei Ihre IP-Adresse an Google; nach Angaben von Google speichert Google Analytics 4 keine IP-Adressen. Übermittlung in die USA auf Grundlage des EU–US Data Privacy Framework und der SCC.</li>
       <li><strong>Microsoft Ireland Operations Limited</strong> (Irland) — Microsoft Clarity (Projekt-ID ws6puxcjnb), Heatmaps und Aufzeichnungen von Besuchen (Mausbewegungen, Klicks, Scrollen). Wird <strong>erst nach Ihrer Einwilligung</strong> geladen. Übermittlung in die USA auf Grundlage des EU–US Data Privacy Framework und der SCC.</li>
+      <li><strong>Umami (eigene Besuchsmessung)</strong> — läuft auf unserem eigenen Server (<code>analytika.samecdigital.com</code>), nicht bei einem Dritten; Daten geben wir nicht weiter. Es verwendet weder Cookies noch sonstigen Speicher im Browser. Gespeichert werden anonyme Besuchsdaten: Seitenadresse, Herkunft des Besuchs, Gerätetyp, Browser und Betriebssystem, Sprache und ungefährer Standort (Land, Region, Stadt). Die IP-Adresse wird nicht gespeichert; aus ihr, dem Browser und einem regelmäßig wechselnden Salt wird ein Einweg-Hash berechnet, aus dem sich nicht zurückverfolgen lässt, wer Sie sind. Wird immer geladen, auch wenn Sie „Nur notwendige" wählen.</li>
       <li><strong>Google Ireland Limited</strong> (Irland) — YouTube-Player (<code>youtube-nocookie.com</code>) bei Videos im Maschinenkatalog und in der Enzyklopädie. Wird <strong>erst nach einem Klick</strong> auf das Video geladen; vorher wird nichts von YouTube abgerufen. Google erhält dabei Ihre IP-Adresse, der Player speichert Daten im Browser-Speicher (<code>localStorage</code>, IndexedDB), und Daten können in die USA übermittelt werden (EU–US Data Privacy Framework).</li>
       <li><strong>Google Ireland Limited</strong> (Irland) — Anmeldung im Gebrauchtmarkt über Google. Wird <strong>erst nach einem Klick</strong> auf die Schaltfläche gestartet; vorher wird nichts von Google geladen. Google erhält dabei Ihre IP-Adresse und die Information, dass Sie sich bei agro-svet.cz anmelden; von Google erhalten wir Ihre E-Mail-Adresse und Ihren Namen. Übermittlung in die USA auf Grundlage des EU–US Data Privacy Framework und von SCC.</li>
     </ul>
@@ -704,7 +715,7 @@ const meta = META[locale] ?? META.cs;
       <li><strong>Widerruf der Einwilligung</strong> jederzeit (Art. 7 Abs. 3) — betrifft die Reichweitenmessung (Link <strong>Cookie-Einstellungen</strong> in der Fußzeile) und den Newsletter</li>
     </ul>
     <p>Ihren Antrag senden Sie an <a href="mailto:info@samecdigital.com">info@samecdigital.com</a>. Wir beantworten ihn unverzüglich, spätestens innerhalb eines Monats (Art. 12 Abs. 3 DSGVO).</p>
-    <p><strong>Widerspruchsrecht (Art. 21 DSGVO):</strong> Soweit wir Daten auf Grundlage berechtigter Interessen verarbeiten (Betrugsprävention, Betriebssicherheit), können Sie dieser Verarbeitung aus Gründen, die sich aus Ihrer besonderen Situation ergeben, jederzeit widersprechen. Eine automatisierte Entscheidungsfindung einschließlich Profiling im Sinne von Art. 22 DSGVO findet nicht statt.</p>
+    <p><strong>Widerspruchsrecht (Art. 21 DSGVO):</strong> Soweit wir Daten auf Grundlage berechtigter Interessen verarbeiten (Betrugsprävention, Betriebssicherheit, anonyme Besuchszählung), können Sie dieser Verarbeitung aus Gründen, die sich aus Ihrer besonderen Situation ergeben, jederzeit widersprechen. Eine automatisierte Entscheidungsfindung einschließlich Profiling im Sinne von Art. 22 DSGVO findet nicht statt.</p>
 
     <h2>7. Abmeldung vom Newsletter</h2>
     <p>Das Newsletter-Abonnement können Sie jederzeit beenden:</p>
@@ -746,10 +757,11 @@ const meta = META[locale] ?? META.cs;
     </table>
     <p><strong>Analyse-Cookies</strong> — Google Analytics 4 (<code>_ga</code>, <code>_ga_*</code>) und Microsoft Clarity (<code>_clck</code>, <code>_clsk</code>) — werden <strong>ausschließlich mit Ihrer Einwilligung</strong> geladen. Sie messen die Besuchsstatistik und die Bewegung auf der Seite. Speicherdauer: <code>_ga</code> und <code>_ga_*</code> bis zu 2 Jahre, <code>_clck</code> 1 Jahr, <code>_clsk</code> 1 Tag. Wählen Sie „Nur notwendige", wird kein Messskript (Google oder Microsoft) geladen und deren Cookies werden aus dem Browser gelöscht.</p>
     <p>Cookies, die Microsoft Clarity auf eigenen Domains von Microsoft speichern würde (z. B. <code>MUID</code>, <code>CLID</code>, <code>ANONCHK</code>, <code>SM</code>), können wir von unserer Website aus nicht löschen; Sie entfernen sie in den Browser-Einstellungen.</p>
+    <p>Die eigene Messung <strong>Umami</strong> verwendet weder Cookies noch Browser-Speicher und startet deshalb immer — die Ablehnung der Analyse-Cookies betrifft sie nicht.</p>
     <p>Wir verwenden keine Marketing- oder Werbe-Cookies Dritter.</p>
     <p>Ihre Einwilligung können Sie jederzeit über den Link <strong>Cookie-Einstellungen</strong> in der Fußzeile widerrufen — der Widerruf ist ebenso einfach wie die Erteilung (Art. 7 Abs. 3 DSGVO).</p>
 
-    <p class="effective"><strong>Datum des Inkrafttretens:</strong> 17. Oktober 2026 · <strong>Letzte Änderung:</strong> 21. November 2026</p>
+    <p class="effective"><strong>Datum des Inkrafttretens:</strong> 17. Oktober 2026 · <strong>Letzte Änderung:</strong> 23. November 2026</p>
     </Fragment>
   ) : (
     <Fragment>
@@ -839,6 +851,7 @@ const meta = META[locale] ?? META.cs;
         <tr><td>Provoz uživatelského účtu (bazar)</td><td>Plnění smlouvy — odst. 1 písm. b)</td></tr>
         <tr><td>Zveřejňování inzerátů</td><td>Plnění smlouvy — odst. 1 písm. b)</td></tr>
         <tr><td>Měření návštěvnosti (Google Analytics, Microsoft Clarity)</td><td>Souhlas — odst. 1 písm. a)</td></tr>
+        <tr><td>Anonymní počítání návštěv bez cookies (vlastní Umami)</td><td>Oprávněný zájem — odst. 1 písm. f) (vědět, kolik lidí web čte a které stránky)</td></tr>
         <tr><td>Zveřejnění akce v kalendáři na vaši žádost, potvrzení přijetí a sdělení rozhodnutí o zveřejnění</td><td>Plnění smlouvy — odst. 1 písm. b)</td></tr>
         <tr><td>Uložení kontaktu prodejce z veřejného inzerátu a nabídka, aby si inzerát převzal do bazaru (viz 2.5)</td><td>Oprávněný zájem — odst. 1 písm. f) (nabídnout prodejci zveřejnění jeho nabídky v bazaru)</td></tr>
         <tr><td>Anti-fraud, bezpečnost provozu</td><td>Oprávněný zájem — odst. 1 písm. f)</td></tr>
@@ -873,6 +886,7 @@ const meta = META[locale] ?? META.cs;
       <li><strong>Resend, Inc.</strong> (USA) — odesílání transakčních a newsletter e-mailů a doručování zpráv z kontaktního formuláře do naší schránky. SCC.</li>
       <li><strong>Google Ireland Limited</strong> (Irsko) — Google Analytics 4 (měřicí ID G-HC3JY466RR), statistika návštěvnosti; cookies <code>_ga</code> a <code>_ga_*</code> ukládají náhodný identifikátor prohlížeče až na 2 roky. Načte se <strong>až po vašem souhlasu</strong>. Prohlížeč přitom Googlu předá vaši IP adresu; podle Googlu Google Analytics 4 IP adresy neukládá. Přenos do USA na základě rámce EU–US Data Privacy Framework a SCC.</li>
       <li><strong>Microsoft Ireland Operations Limited</strong> (Irsko) — Microsoft Clarity (ID projektu ws6puxcjnb), heatmapy a záznamy návštěv (pohyb myši, kliknutí, posouvání). Načte se <strong>až po vašem souhlasu</strong>. Přenos do USA na základě rámce EU–US Data Privacy Framework a SCC.</li>
+      <li><strong>Umami (vlastní měření návštěvnosti)</strong> — běží na našem vlastním serveru (<code>analytika.samecdigital.com</code>), ne u třetí strany; údaje nikam nepředáváme. Nepoužívá cookies ani jiné úložiště v prohlížeči. Ukládá anonymní údaje o návštěvě: adresu stránky, odkud jste přišli, typ zařízení, prohlížeč a operační systém, jazyk a přibližnou polohu (stát, region, město). IP adresu neukládá; z ní, z prohlížeče a z pravidelně se měnící soli se spočítá jednosměrný otisk, ze kterého nejde zpětně poznat, kdo jste. Načte se vždy, i když zvolíte „Pouze nezbytné".</li>
       <li><strong>Google Ireland Limited</strong> (Irsko) — přehrávač YouTube (<code>youtube-nocookie.com</code>) u videí v katalogu techniky a v encyklopedii. Načte se <strong>až po kliknutí</strong> na video, do té doby se z YouTube nenačítá nic. Google přitom dostane vaši IP adresu, přehrávač ukládá data do úložiště prohlížeče (<code>localStorage</code>, IndexedDB) a data mohou jít do USA (EU–US Data Privacy Framework).</li>
       <li><strong>Google Ireland Limited</strong> (Irsko) — přihlášení do bazaru přes Google. Spustí se <strong>až po kliknutí</strong> na tlačítko; do té doby se z Googlu nenačítá nic. Google přitom dostane vaši IP adresu a údaj, že se přihlašujete k agro-svet.cz; my od něj dostaneme váš e-mail a jméno. Přenos do USA na základě rámce EU–US Data Privacy Framework a SCC.</li>
     </ul>
@@ -891,7 +905,7 @@ const meta = META[locale] ?? META.cs;
       <li><strong>Odvolání souhlasu</strong> kdykoli (čl. 7 odst. 3) — týká se měření návštěvnosti (odkaz <strong>Nastavení cookies</strong> v patičce) a newsletteru</li>
     </ul>
     <p>Žádost zašlete na <a href="mailto:info@samecdigital.com">info@samecdigital.com</a>. Vyřídíme ji bez zbytečného odkladu, nejpozději do jednoho měsíce (čl. 12 odst. 3 GDPR).</p>
-    <p><strong>Právo vznést námitku (čl. 21 GDPR):</strong> Pokud údaje zpracováváme na základě oprávněného zájmu (anti-fraud, bezpečnost provozu), můžete proti tomuto zpracování kdykoli vznést námitku z důvodů týkajících se vaší konkrétní situace. Automatizované rozhodování včetně profilování ve smyslu čl. 22 GDPR neprovádíme.</p>
+    <p><strong>Právo vznést námitku (čl. 21 GDPR):</strong> Pokud údaje zpracováváme na základě oprávněného zájmu (anti-fraud, bezpečnost provozu, anonymní počítání návštěv), můžete proti tomuto zpracování kdykoli vznést námitku z důvodů týkajících se vaší konkrétní situace. Automatizované rozhodování včetně profilování ve smyslu čl. 22 GDPR neprovádíme.</p>
 
     <h2>7. Odhlášení z newsletteru</h2>
     <p>Odběr newsletteru můžete kdykoli odhlásit:</p>
@@ -922,10 +936,11 @@ const meta = META[locale] ?? META.cs;
     </table>
     <p><strong>Analytické cookies</strong> — Google Analytics 4 (<code>_ga</code>, <code>_ga_*</code>) a Microsoft Clarity (<code>_clck</code>, <code>_clsk</code>) — se načtou <strong>jen s vaším souhlasem</strong>. Měří návštěvnost a to, jak se po stránce pohybujete. Doba uložení: <code>_ga</code> a <code>_ga_*</code> až 2 roky, <code>_clck</code> 1 rok, <code>_clsk</code> 1 den. Pokud zvolíte „Pouze nezbytné", nenačte se žádný měřicí skript (Google ani Microsoft) a jejich cookies se z prohlížeče smažou.</p>
     <p>Cookies, které by Microsoft Clarity uložil na vlastních doménách Microsoftu (například <code>MUID</code>, <code>CLID</code>, <code>ANONCHK</code>, <code>SM</code>), z našeho webu smazat neumíme; zrušíte je v nastavení prohlížeče.</p>
+    <p>Vlastní měření <strong>Umami</strong> cookies ani úložiště prohlížeče nepoužívá, a proto se spouští vždy — odmítnutí analytických cookies se ho netýká.</p>
     <p>Nepoužíváme marketingové ani reklamní cookies třetích stran.</p>
     <p>Souhlas můžete kdykoli odvolat odkazem <strong>Nastavení cookies</strong> v patičce — odvolání je stejně snadné jako udělení (čl. 7 odst. 3 GDPR).</p>
 
-    <p class="effective"><strong>Účinnost:</strong> 17. října 2026 · <strong>Poslední úprava:</strong> 21. listopadu 2026</p>
+    <p class="effective"><strong>Účinnost:</strong> 17. října 2026 · <strong>Poslední úprava:</strong> 23. listopadu 2026</p>
     </Fragment>
   )}
   </div>
