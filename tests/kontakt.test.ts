@@ -53,7 +53,8 @@ async function submit(fields: Partial<Record<keyof typeof VALID, string>> = {}, 
   const request = new Request('https://agro-svet.cz/api/kontakt/', {
     method: 'POST',
     body, // application/x-www-form-urlencoded — přesně to, co pošle <form method="POST">
-    headers: { 'cf-connecting-ip': ip },
+    // Požadavek přes Cloudflare: spojení z jeho rozsahu + IP návštěvníka v CF-Connecting-IP.
+    headers: { 'x-forwarded-for': '104.21.1.190', 'cf-connecting-ip': ip },
   });
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return POST({ request, locals: {}, clientAddress: '127.0.0.1' } as any) as Promise<Response>;

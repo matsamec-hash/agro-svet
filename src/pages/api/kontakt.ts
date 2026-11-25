@@ -15,6 +15,7 @@ import { parseKontaktForm, sendKontaktEmail } from '../../lib/kontakt-email';
 import { localizePath } from '../../i18n/utils';
 import { defaultLocale, isLocale, type Locale } from '../../i18n/config';
 import type { KontaktError } from '../../i18n/kontakt';
+import { clientIp } from '../../lib/client-ip';
 
 export const prerender = false;
 
@@ -41,14 +42,14 @@ function formLocale(form: FormData | null): Locale {
   return typeof v === 'string' && isLocale(v) ? v : defaultLocale;
 }
 
-function clientIp(request: Request, getAddress: () => string | undefined): string {
-  const cf = request.headers.get('cf-connecting-ip');
-  if (cf) return cf.trim();
+function requestIp(request: Request, getAddress: () => string | undefined): string {
+  let socket: string | undefined
   try {
-    return getAddress() ?? 'unknown';
+    socket = getAddress()
   } catch {
-    return 'unknown';
+    socket = undefined
   }
+  return clientIp(request.headers, socket)
 }
 
 export const POST: APIRoute = async (context) => {
@@ -75,7 +76,7 @@ export const POST: APIRoute = async (context) => {
   // Throttle až po validaci: překlep v e-mailu nemá ubírat z limitu.
   const limit = await edgeThrottle({
     bucket: 'kontakt',
-    key: clientIp(request, () => context.clientAddress),
+    key: requestIp(request, () => context.clientAddress),
     max: THROTTLE_MAX,
     windowS: THROTTLE_WINDOW_S,
   });

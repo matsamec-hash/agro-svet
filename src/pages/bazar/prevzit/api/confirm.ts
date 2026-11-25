@@ -2,6 +2,7 @@ import type { APIRoute } from 'astro';
 import { createAnonClient, createServerClient } from '../../../../lib/supabase';
 import { confirmProspect, getProspectByToken, type EnsureUser } from '../../../../lib/bazar-seed';
 import { SITE_URL } from '../../../../lib/config';
+import { clientIp } from '../../../../lib/client-ip';
 
 export const prerender = false;
 
@@ -46,7 +47,7 @@ export const POST: APIRoute = async ({ request, clientAddress, cookies }) => {
   // Host-based CSRF v middleware pouští POSTy bez Origin (server-to-server); IP pro
   // audit proto bereme z Cloudflare hlavičky (stejná konvence jako ostatní bazar API
   // za týmž proxy řetězcem CF→Traefik→Node) s fallbackem na clientAddress.
-  const ip = request.headers.get('cf-connecting-ip') ?? clientAddress ?? 'unknown';
+  const ip = clientIp(request.headers, clientAddress);
   try {
     const prospect = await getProspectByToken(supabase, token);
     const effectiveEmail = (prospect?.email && prospect.email.trim()) || formEmail;

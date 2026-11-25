@@ -4,6 +4,7 @@ import { getEnvVar } from '../../../lib/env';
 import { AGRO_SVET_SITE_ID } from '../../../lib/config';
 import { sendNewsletterConfirmation } from '../../../lib/newsletter-email';
 import { edgeThrottle } from '../../../lib/edge-throttle';
+import { clientIp } from '../../../lib/client-ip';
 
 export const prerender = false;
 
@@ -18,7 +19,7 @@ const THROTTLE_WINDOW_S = 15 * 60;
 
 export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
   // Throttle before any DB / email work.
-  const ip = (request.headers.get('cf-connecting-ip') ?? clientAddress ?? 'unknown').toString();
+  const ip = clientIp(request.headers, clientAddress);
   const limit = await edgeThrottle({
     bucket: 'newsletter-subscribe',
     key: ip,

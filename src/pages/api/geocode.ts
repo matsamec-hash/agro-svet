@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro';
 import { geocode, isPlausibleCzCoord } from '../../lib/geocode';
 import { edgeThrottle } from '../../lib/edge-throttle';
+import { clientIp } from '../../lib/client-ip';
 
 export const prerender = false;
 
@@ -12,7 +13,7 @@ const THROTTLE_MAX = 20;
 const THROTTLE_WINDOW_S = 60;
 
 export const GET: APIRoute = async ({ request, url, locals, clientAddress }) => {
-  const ip = (request.headers.get('cf-connecting-ip') ?? clientAddress ?? 'unknown').toString();
+  const ip = clientIp(request.headers, clientAddress);
   const limit = await edgeThrottle({
     bucket: 'geocode',
     key: ip,

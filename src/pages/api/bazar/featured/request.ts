@@ -10,6 +10,7 @@ import { edgeThrottle } from '../../../../lib/edge-throttle';
 import { getEnvVar } from '../../../../lib/env';
 import { BAZAR_TOPOVANI_ENABLED } from '../../../../lib/config';
 import { buildSpayd } from '../../../../lib/spayd';
+import { clientIp } from '../../../../lib/client-ip';
 
 export const prerender = false;
 
@@ -29,7 +30,7 @@ export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
   const user = (locals as any).user;
   if (!user) return json({ error: 'unauthenticated' }, 401);
 
-  const ip = (request.headers.get('cf-connecting-ip') ?? clientAddress ?? 'unknown').toString();
+  const ip = clientIp(request.headers, clientAddress);
   const limit = await edgeThrottle({
     bucket: 'featured-request',
     key: ip,

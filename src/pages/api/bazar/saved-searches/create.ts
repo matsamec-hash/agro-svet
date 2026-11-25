@@ -7,6 +7,7 @@ import { createServerClient } from '../../../../lib/supabase';
 import { getEnvVar } from '../../../../lib/env';
 import { edgeThrottle } from '../../../../lib/edge-throttle';
 import { Resend } from 'resend';
+import { clientIp } from '../../../../lib/client-ip';
 
 export const prerender = false;
 
@@ -21,7 +22,7 @@ function json(body: unknown, status = 200) {
 }
 
 export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
-  const ip = (request.headers.get('cf-connecting-ip') ?? clientAddress ?? 'unknown').toString();
+  const ip = clientIp(request.headers, clientAddress);
   const limit = await edgeThrottle({
     bucket: 'bazar-saved-search-create',
     key: ip,

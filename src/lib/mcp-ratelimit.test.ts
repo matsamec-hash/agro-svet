@@ -32,11 +32,13 @@ describe('checkMcpRateLimit', () => {
 
 describe('clientIpFrom', () => {
   const mk = (h: Record<string, string>) => new Request('https://x/', { headers: h });
-  it('preferuje cf-connecting-ip', () => {
-    expect(clientIpFrom(mk({ 'cf-connecting-ip': '1.2.3.4', 'x-forwarded-for': '9.9.9.9' }))).toBe('1.2.3.4');
+  it('věří cf-connecting-ip jen když spojení přichází z Cloudflare', () => {
+    expect(clientIpFrom(mk({ 'cf-connecting-ip': '1.2.3.4', 'x-forwarded-for': '104.21.1.190' }))).toBe('1.2.3.4');
+    // přímý přístup na VPS: podvržená hlavička se ignoruje
+    expect(clientIpFrom(mk({ 'cf-connecting-ip': '1.2.3.4', 'x-forwarded-for': '9.9.9.9' }))).toBe('9.9.9.9');
   });
   it('spadne na první x-forwarded-for', () => {
-    expect(clientIpFrom(mk({ 'x-forwarded-for': '5.6.7.8, 9.9.9.9' }))).toBe('5.6.7.8');
+    expect(clientIpFrom(mk({ 'x-forwarded-for': '5.6.7.8, 9.9.9.9' }))).toBe('9.9.9.9');
   });
   it('fallback když nic', () => {
     expect(clientIpFrom(mk({}), 'fb')).toBe('fb');

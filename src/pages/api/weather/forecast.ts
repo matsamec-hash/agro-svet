@@ -2,6 +2,7 @@ import type { APIRoute } from 'astro';
 import { fetchPointForecast, roundCoord } from '../../../lib/met-norway';
 import { runtimeCache } from '../../../lib/runtime-cache';
 import { edgeThrottle } from '../../../lib/edge-throttle';
+import { clientIp } from '../../../lib/client-ip';
 
 // Předpověď pro „Moje pole" (HomeWeather). Prohlížeč posílá souřadnice SEM,
 // ne k MET ani jinam — MET tak nedostane IP návštěvníka (podmínky MET i naše
@@ -44,7 +45,7 @@ export const GET: APIRoute = async ({ request, url, locals, clientAddress }) => 
     if (hit) return hit;
   } catch { /* cache je best-effort */ }
 
-  const ip = (request.headers.get('cf-connecting-ip') ?? clientAddress ?? 'unknown').toString();
+  const ip = clientIp(request.headers, clientAddress);
   const limit = await edgeThrottle({
     bucket: 'weather-forecast',
     key: ip,

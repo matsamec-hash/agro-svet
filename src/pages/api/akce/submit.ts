@@ -6,6 +6,7 @@ import { geocode } from '../../../lib/geocode';
 import { sendSubmissionConfirmation, notifyModerator } from '../../../lib/akce-email';
 import { getEnvVar } from '../../../lib/env';
 import { edgeThrottle } from '../../../lib/edge-throttle';
+import { clientIp } from '../../../lib/client-ip';
 
 export const prerender = false;
 
@@ -15,6 +16,24 @@ export const POST: APIRoute = async ({ request, clientAddress, locals }) => {
   // Honeypot — boti vyplní; lidé ne (pole je skryté CSS).
   if (String(form.get('web_url') ?? '').trim() !== '') {
     return json({ ok: true });
+  }
+
+  // Odeslání akce zapisuje do databáze, geokóduje a posílá e-mail na zadanou adresu:
+  // limit na IP, na cílový e-mail a celkový strop za hodinu.
+  const ip = clientIp(request.headers, clientAddress);
+  const emailKey = String(form.get('email') ?? '').trim().toLowerCase().slice(0, 254);
+  for (const t of [
+    { bucket: 'akce-ip', key: ip, max: 5, windowS: 3600 },
+    { bucket: 'akce-email', key: emailKey, max: 3, windowS: 86_400 },
+    { bucket: 'akce-all', key: 'all', max: 100, windowS: 3600 },
+  ]) {
+    const limit = await edgeThrottle({ ...t, ctx: (locals as any).cfContext });
+    if (!limit.ok) {
+      return new Response(
+        JSON.stringify({ ok: false, errors: ['Příliš mnoho odeslání, zkuste to prosím později.'] }),
+        { status: 429, headers: { 'content-type': 'application/json', 'retry-after': String(limit.retryAfterS) } },
+      );
+    }
   }
 
   const druh = String(form.get('druh') ?? 'jednorazova') as AkceInput['druh'];
@@ -60,7 +79,6 @@ export const POST: APIRoute = async ({ request, clientAddress, locals }) => {
         return json({ ok: false, errors: ['Některá fotka je příliš velká (max 5 MB).'] }, 400);
       }
     }
-    const ip = (request.headers.get('cf-connecting-ip') ?? clientAddress ?? 'unknown').toString();
     const limit = await edgeThrottle({ bucket: 'akce-foto', key: ip, max: 10, windowS: 3600, ctx: (locals as any).cfContext });
     if (!limit.ok) {
       return json({ ok: false, errors: ['Příliš mnoho nahrání fotek, zkuste to prosím za chvíli.'] }, 429);

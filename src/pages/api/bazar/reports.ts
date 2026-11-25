@@ -8,6 +8,7 @@ import {
   sendBazarReportNotification,
   sendBazarReportConfirmation,
 } from '../../../lib/bazar-report-email';
+import { clientIp } from '../../../lib/client-ip';
 
 // Oznámení závadného inzerátu (DSA čl. 16). Náležitosti podle odst. 2 hlídá
 // validateReport(); potvrzení o přijetí (odst. 4) jde oznamovateli e-mailem.
@@ -26,7 +27,7 @@ async function sha256Hex(input: string): Promise<string> {
 }
 
 export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
-  const ip = (request.headers.get('cf-connecting-ip') ?? clientAddress ?? 'unknown').toString();
+  const ip = clientIp(request.headers, clientAddress);
 
   const limit = await edgeThrottle({
     bucket: 'bazar-report',

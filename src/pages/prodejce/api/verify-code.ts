@@ -6,6 +6,7 @@ import { isRateLimited, recordCodeAttempt } from '../../../lib/bazar-code-rateli
 import { getProspectByCode } from '../../../lib/bazar-seed';
 import { isTokenExpired } from '../../../lib/bazar-seed-token';
 import { SITE_URL } from '../../../lib/config';
+import { clientIp } from '../../../lib/client-ip';
 
 export const prerender = false;
 
@@ -18,7 +19,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
   const form = await request.formData();
   const code = form.get('code')?.toString() ?? '';
   const turnstileToken = form.get('cf-turnstile-response')?.toString() ?? '';
-  const ip = request.headers.get('cf-connecting-ip') ?? clientAddress ?? 'unknown';
+  const ip = clientIp(request.headers, clientAddress);
 
   if (await isRateLimited(supabase, ip)) {
     return redirectBack('Příliš mnoho pokusů. Zkuste to za pár minut.');

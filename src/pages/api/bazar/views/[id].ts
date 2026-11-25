@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro';
 import { createAnonClient } from '../../../../lib/supabase';
 import { edgeThrottle } from '../../../../lib/edge-throttle';
+import { clientIp } from '../../../../lib/client-ip';
 
 export const prerender = false;
 
@@ -39,7 +40,7 @@ export const POST: APIRoute = async ({ params, request, cookies, clientAddress, 
 
   // Edge throttle — protect against view-stuffing scripts (caller IP, generous
   // cap so honest reload-spam doesn't trip).
-  const ip = (request.headers.get('cf-connecting-ip') || clientAddress || 'unknown').slice(0, 64);
+  const ip = clientIp(request.headers, clientAddress).slice(0, 64);
   const throttle = await edgeThrottle({
     bucket: 'bazar-views',
     key: `${ip}:${id}`,

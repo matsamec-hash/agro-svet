@@ -1,3 +1,4 @@
+import { clientIp } from './client-ip';
 /**
  * In-memory sliding-window rate limit pro veřejný MCP endpoint (`/api/mcp/`).
  *
@@ -47,12 +48,7 @@ export function checkMcpRateLimit(ip: string, now: number = Date.now()): RateLim
   return { limited: false, retryAfter: 0 };
 }
 
-/** Vytáhne klientskou IP z hlaviček (za Cloudflare je reálná v cf-connecting-ip). */
+/** Klientská IP: poslední záznam X-Forwarded-For; CF-Connecting-IP jen když spojení přichází z Cloudflare (lib/client-ip.ts). */
 export function clientIpFrom(request: Request, fallback?: string): string {
-  return (
-    request.headers.get('cf-connecting-ip') ||
-    request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
-    fallback ||
-    'unknown'
-  );
+  return clientIp(request.headers, fallback);
 }

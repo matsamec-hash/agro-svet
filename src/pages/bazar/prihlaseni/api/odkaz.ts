@@ -4,6 +4,7 @@ import { getEnvVar } from '../../../../lib/env';
 import { SITE_URL } from '../../../../lib/config';
 import { edgeThrottle } from '../../../../lib/edge-throttle';
 import { Resend } from 'resend';
+import { clientIp } from '../../../../lib/client-ip';
 
 export const prerender = false;
 
@@ -17,7 +18,7 @@ export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
   const generic = () =>
     new Response(null, { status: 303, headers: { Location: '/bazar/prihlaseni/?odkaz=1' } });
 
-  const ip = (request.headers.get('cf-connecting-ip') ?? clientAddress ?? 'unknown').toString();
+  const ip = clientIp(request.headers, clientAddress);
   const limit = await edgeThrottle({
     bucket: 'login-link',
     key: ip,
