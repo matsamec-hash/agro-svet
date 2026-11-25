@@ -1,0 +1,6 @@
+{
+  "allow": [
+    { "rule": "R2", "path": "src/pages/api/newsletter/unsubscribe.ts", "reason": "odhlášení je vázané na nehádatelný unsubscribe_token z e-mailu, bez tokenu nic nedělá" },
+    { "rule": "R2", "path": "src/pages/api/bazar/saved-searches/unsubscribe.ts", "reason": "odhlášení je vázané na nehádatelný token z e-mailu, bez tokenu nic nedělá" }
+  ]
+}

@@ -6,6 +6,8 @@ import {
   expectedGateHash,
   gateActive,
 } from '../../lib/site-gate';
+import { clientIp } from '../../lib/client-ip';
+import { edgeThrottle } from '../../lib/edge-throttle';
 
 function safeNext(raw: string | null | undefined): string {
   if (!raw) return '/';
@@ -14,10 +16,22 @@ function safeNext(raw: string | null | undefined): string {
   return '/';
 }
 
-export const POST: APIRoute = async ({ request, cookies, redirect }) => {
+export const POST: APIRoute = async ({ request, cookies, redirect, clientAddress, locals }) => {
   // If the gate is disabled, the page should not exist — but be safe.
   if (!gateActive()) {
     return redirect('/');
+  }
+
+  // Hádání hesla brány: 10 pokusů za 15 minut na IP.
+  const limit = await edgeThrottle({
+    bucket: 'unlock-ip',
+    key: clientIp(request.headers, clientAddress),
+    max: 10,
+    windowS: 900,
+    ctx: (locals as any).cfContext,
+  });
+  if (!limit.ok) {
+    return new Response('Too many attempts', { status: 429, headers: { 'retry-after': String(limit.retryAfterS) } });
   }
 
   const form = await request.formData();
