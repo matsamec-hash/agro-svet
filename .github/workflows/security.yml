@@ -1,0 +1,21 @@
+# Zkopíruj do .github/workflows/security.yml a zkopíruj ci/security-check.mjs do scripts/security-check.mjs.
+# Zapni v GitHubu: Settings → Branches → větev, ze které se nasazuje → Require status checks → "security".
+# Pak kritické nálezy opravdu zablokují merge (a tím i nasazení z Coolify).
+name: security
+on:
+  pull_request:
+  push:
+    branches: [main, master]
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: Statická kontrola podle SECURITY-STANDARD.md
+        run: node scripts/security-check.mjs .
+      - name: Zranitelné závislosti (kritické blokují)
+        # Dokud projekt nemá vyřešené kritické nálezy, nech `continue-on-error: true` a založ úkol.
+        continue-on-error: false
+        run: npm audit --omit=dev --audit-level=critical --registry=https://registry.npmjs.org
