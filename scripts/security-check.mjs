@@ -45,7 +45,7 @@ const add = (rule, level, path, line, text) => {
 }
 
 const CODE = /\.(ts|tsx|js|mjs|astro|svelte|php)$/
-const TEST = /(\.test\.|\.spec\.|\/tests?\/|\/__tests__\/|\/mockups?\/|\/scripts\/)/
+const TEST = /(\.test\.|\.spec\.|(^|\/)tests?\/|(^|\/)__tests__\/|(^|\/)mockups?\/|(^|\/)scripts\/)/
 
 // R1: CF-Connecting-IP se nesmí číst přímo (jen v client-ip modulu): podvrhne ho kdokoli, kdo jde na VPS mimo Cloudflare.
 // R4: tajné klíče ve verzovaných souborech.
