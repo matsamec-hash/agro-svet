@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../../lib/json-ld';
 export const prerender = true;
 import Layout from '../../../layouts/Layout.astro';
 import { CATEGORIES, BRANDS } from '../../../lib/bazar-constants';
@@ -22,7 +23,7 @@ const brandFilters = BRANDS.map((b) => ({ value: b.value, label: b.label }));
   description="Najděte zemědělskou techniku na mapě. Traktory, kombajny, stroje a další inzeráty z celé ČR s polohou prodejce."
   canonical="https://agro-svet.cz/bazar/mapa/"
 >
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumbJsonLd)} />
 
   <!-- Leaflet: vlastní kopie v /vendor (dřív unpkg = IP návštěvníka cizímu CDN bez souhlasu). -->
   <link

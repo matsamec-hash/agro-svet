@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../../lib/json-ld';
 export const prerender = false;
 import Layout from '../../../layouts/Layout.astro';
 import { licenseUrlFor, requiresAuthor } from '../../../lib/photo-credit';
@@ -82,9 +83,9 @@ const faqJsonLd = faqItems ? faqPageSchema(faqItems) : null;
 ---
 
 <Layout title={pageTitle} description={pageDesc} canonical={canonical}>
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(thingJsonLd)} />
-  {faqJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />}
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(thingJsonLd)} />
+  {faqJsonLd && <script type="application/ld+json" is:inline set:html={safeJsonLd(faqJsonLd)} />}
 
   <div class="vcela-page">
 

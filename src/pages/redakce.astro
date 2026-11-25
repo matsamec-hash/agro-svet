@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../lib/json-ld';
 export const prerender = false;
 import Layout from '../layouts/Layout.astro';
 import { SITE_URL } from '../lib/config';
@@ -44,8 +45,8 @@ const orgJsonLd = {
       říkal „alternativa", canonical „duplikát". */}
   canonical={locale === 'cs' ? `${SITE_URL}/redakce/` : undefined}
 >
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(orgJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(orgJsonLd)} />
 
   <div class="redakce">
   {isUk ? (

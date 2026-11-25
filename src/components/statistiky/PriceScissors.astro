@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../lib/json-ld';
 // src/components/statistiky/PriceScissors.astro
 import type { PriceScissorsPoint } from '../../lib/agro-derived';
 import { useTranslations } from '../../i18n/utils';
@@ -50,7 +51,7 @@ const t = useTranslations(locale);
   </div>
 </section>
 
-<script type="application/json" id="scissorsData" set:html={JSON.stringify({ points })}></script>
+<script type="application/json" id="scissorsData" set:html={safeJsonLd({ points })}></script>
 
 <style>
   .sp-section{margin:32px 0 36px;scroll-margin-top:200px}

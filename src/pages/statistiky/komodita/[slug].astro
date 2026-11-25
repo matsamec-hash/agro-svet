@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../../lib/json-ld';
 // src/pages/statistiky/komodita/[slug].astro
 // Detail jedné komodity — plná cenová historie (interaktivní Chart.js graf),
 // aktuální cena, meziroční změna, min/max a sezónní 5letý průměr.
@@ -84,7 +85,7 @@ const datasetJsonLd = detailNoindex
 ---
 
 <Layout title={title} description={description} noindex={detailNoindex} noHreflang={true}>
-  {datasetJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(datasetJsonLd)} />}
+  {datasetJsonLd && <script type="application/ld+json" is:inline set:html={safeJsonLd(datasetJsonLd)} />}
   <div class="kd">
     <div class="kd-wrap">
       <nav class="kd-crumb" aria-label={t('a11y.breadcrumb')}>
@@ -151,7 +152,7 @@ const datasetJsonLd = detailNoindex
     </div>
   </div>
 
-  <script type="application/json" id="kdData" set:html={JSON.stringify(chartData)} />
+  <script type="application/json" id="kdData" set:html={safeJsonLd(chartData)} />
   <script is:inline src="/vendor/chartjs/chart-4.5.1.umd.min.js"></script>
   <script is:inline>
     (function () {

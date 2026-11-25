@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../../lib/json-ld';
 // Hybrid: ~1500 nejlepších párů zůstávají prerendered (build-time generated
 // z expandedComparisonPairs). Pro ostatní validní páry (custom picker, nebo
 // libovolný kombinace přímo z URL) page funguje jako SSR fallback — combo
@@ -148,9 +149,9 @@ function modelLink(m: typeof a): string {
 ---
 
 <Layout title={title} description={description} canonical={canonical} ogImage={aPhoto}>
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(itemListJsonLd)} />
-  {faqJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />}
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(itemListJsonLd)} />
+  {faqJsonLd && <script type="application/ld+json" is:inline set:html={safeJsonLd(faqJsonLd)} />}
 
   <div class="cmp-page">
 

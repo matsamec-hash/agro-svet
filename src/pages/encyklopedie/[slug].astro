@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../lib/json-ld';
 // SSR (prerender:false): middleware servíruje /sk a /uk verzi přes locals.locale.
 // sk čte z 'encyklopedieSk', uk z 'encyklopedieUk' (přeložené overlay kolekce)
 // BEZ cs fallbacku — chybějící sk/uk slug = 404 (žádný cs leak).
@@ -228,13 +229,13 @@ const articleJsonLd = {
 ---
 
 <Layout title={seoTitle} titleMaxLength={TITLE_MAX} description={item.data.popis} canonical={locale === 'cs' ? pageUrl : undefined} ogType="product" ogImage={ogImageAbs}>
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(productJsonLd)} />
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(articleJsonLd)} />
-  {faqJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />}
-  {galleryJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(galleryJsonLd)} />}
-  {videoJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(videoJsonLd)} />}
-  {reviewJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(reviewJsonLd)} />}
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(productJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(articleJsonLd)} />
+  {faqJsonLd && <script type="application/ld+json" is:inline set:html={safeJsonLd(faqJsonLd)} />}
+  {galleryJsonLd && <script type="application/ld+json" is:inline set:html={safeJsonLd(galleryJsonLd)} />}
+  {videoJsonLd && <script type="application/ld+json" is:inline set:html={safeJsonLd(videoJsonLd)} />}
+  {reviewJsonLd && <script type="application/ld+json" is:inline set:html={safeJsonLd(reviewJsonLd)} />}
 
   <div style="max-width:980px; margin:0 auto; padding:48px 32px 96px;">
 

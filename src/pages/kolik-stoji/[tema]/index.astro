@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../../lib/json-ld';
 // „Kolik stojí…" detail — cs-only landing s vysokým nákupním intentem.
 // Statické (prerender) — sekce zatím není v SK_LAUNCHED_PREFIXES, /sk mirror
 // nevzniká (žádný český fallback do /sk).
@@ -30,8 +31,8 @@ const related = KOLIK_STOJI_TOPICS.filter((t) => t.slug !== topic.slug);
 ---
 
 <Layout title={topic.metaTitle} description={topic.metaDescription} canonical={canonical}>
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(faqJsonLd)} />
 
   <div class="ks-page">
     <nav class="ks-crumb" aria-label="Cesta">

@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../../lib/json-ld';
 export const prerender = true;
 import Layout from '../../../layouts/Layout.astro';
 import { FEATURED_PLANS } from '../../../lib/bazar-featured-pricing';
@@ -28,8 +29,8 @@ const faqJsonLd = faqPageSchema(faqs);
   description="Zviditelněte svůj inzerát v bazaru. Topování od 99 Kč za týden, 249 Kč za měsíc, 449 Kč za 2 měsíce. Inzerát se zobrazí v sekci Doporučené a v listingu má hvězdičku."
   canonical={pageUrl}
 >
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(faqJsonLd)} />
 
   <div class="top-root">
     <nav class="breadcrumb" aria-label="Cesta">

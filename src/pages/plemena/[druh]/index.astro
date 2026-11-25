@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../../lib/json-ld';
 // SSR (prerender:false): middleware servíruje /sk verzi přes locals.locale.
 // sk čte z plemena-sk overlay (getDruh(slug,'sk')); cs render = literály VERBATIM.
 export const prerender = false;
@@ -70,8 +71,8 @@ const plemenaListJsonLd = sorted.length > 0
   title={tf(locale, 'plem.druh.title', { name: druh.name_plural })}
   description={tf(locale, 'plem.druh.desc', { name: druh.name.toLowerCase(), desc: druh.description.slice(0, 140) })}
 >
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
-  {plemenaListJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(plemenaListJsonLd)} />}
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(jsonLd)} />
+  {plemenaListJsonLd && <script type="application/ld+json" is:inline set:html={safeJsonLd(plemenaListJsonLd)} />}
   <div class="druh-page">
 
     <nav class="breadcrumb" aria-label="Cesta">

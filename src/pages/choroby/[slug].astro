@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../lib/json-ld';
 // SSR — viz choroby/index.astro (locale prefix + prerender se vylučují).
 export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
@@ -48,9 +49,9 @@ const metaDesc = tf(locale, 'chor.d.metaDesc', {
 ---
 
 <Layout title={tf(locale, 'chor.d.titleSuffix', { name: choroba.name })} description={metaDesc}>
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumb)} />
-  {list && <script type="application/ld+json" is:inline set:html={JSON.stringify(list)} />}
-  {faq && <script type="application/ld+json" is:inline set:html={JSON.stringify(faq)} />}
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumb)} />
+  {list && <script type="application/ld+json" is:inline set:html={safeJsonLd(list)} />}
+  {faq && <script type="application/ld+json" is:inline set:html={safeJsonLd(faq)} />}
 
   <div class="ch-detail">
     <nav class="breadcrumb" aria-label={tr('a11y.breadcrumb')}>

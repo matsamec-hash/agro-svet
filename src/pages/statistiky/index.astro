@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../lib/json-ld';
 // src/pages/statistiky/index.astro
 // prerender=false (SSR): launchnuté SK sekce servíruje middleware rewrite, který
 // prerendered routy nepokrývá → tato stránka musí být SSR. Locale ber JEN z
@@ -163,7 +164,7 @@ const PILLS = [
   title={t('stat.meta.title')}
   description={t('stat.meta.description')}
 >
-  <script type="application/ld+json" is:inline set:html={JSON.stringify({
+  <script type="application/ld+json" is:inline set:html={safeJsonLd({
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
@@ -171,7 +172,7 @@ const PILLS = [
       { '@type': 'ListItem', position: 2, name: t('stat.bc.current'), item: `https://agro-svet.cz${localizePath(locale, '/statistiky/')}` },
     ],
   })} />
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(datasetJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(datasetJsonLd)} />
 
   <div class="sp-page">
     <Hero
@@ -210,7 +211,7 @@ const PILLS = [
     <BottomCTA />
   </div>
 
-  <script type="application/json" id="statI18n" set:html={JSON.stringify({
+  <script type="application/json" id="statI18n" set:html={safeJsonLd({
     numLocale,
     animals: { Skot: t('stat.animal.cattle'), Prasata: t('stat.animal.pigs') },
     fuelLabel:     locale === 'sk' ? 'Nafta (EUR/l)'          : locale === 'pl' ? 'Olej napędowy (zł/l)' : 'Nafta (Kč/l)',

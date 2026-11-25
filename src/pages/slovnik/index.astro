@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../lib/json-ld';
 // SSR (prerender:false): middleware servíruje /uk a /sk verzi přes locals.locale.
 // Data + chrome lokalizované; cs render = dnešní literály VERBATIM (byte-identita).
 export const prerender = false;
@@ -49,8 +50,8 @@ const itemListJsonLd = itemListSchema(
   description={tf(locale, 'slovnik.index.desc', { n: SLOVNIK.length })}
   canonical={canonical}
 >
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(itemListJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(itemListJsonLd)} />
 
   <div class="slv-root">
     <nav class="breadcrumb" aria-label="Cesta">

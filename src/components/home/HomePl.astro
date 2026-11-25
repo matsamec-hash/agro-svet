@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../lib/json-ld';
 // Polská homepage = plnohodnotný portál jako CZ verze (zpravodajský feed +
 // rozcestník sekcí + graf komodit + newsletter), NE jen statický rozcestník.
 // Renderuje se z index.astro když locale === 'pl'. Self-contained (vlastní
@@ -134,7 +135,7 @@ const itemListJsonLd = homepageItems.length > 0 ? {
   preloadHeroSizes="(max-width: 900px) 100vw, 800px"
   preloadHeroMaxWidth={800}
 >
-  {itemListJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(itemListJsonLd)} />}
+  {itemListJsonLd && <script type="application/ld+json" is:inline set:html={safeJsonLd(itemListJsonLd)} />}
 
   <h1 class="visually-hidden">Świat rolnictwa — maszyny, marki i aktualności rolnicze</h1>
 

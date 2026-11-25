@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../lib/json-ld';
 // src/pages/doplaty-bezposrednie/index.astro
 // PL-only landing: dopłaty bezpośrednie (přímé platby ARiMR) — stawki 2024/2025,
 // kalkulator zł/ha, tabela schematów, FAQ. Jurisdykčně vázané na PL → obsah je
@@ -93,7 +94,7 @@ const groups: { title: string; rows: Row[]; areaUnit: string }[] = [
   description={`Aktualne stawki dopłat bezpośrednich ARiMR za 2025 r.: podstawowe wsparcie dochodów ${fmt(pwd)} zł/ha, redystrybucyjna ${fmt(redys)} zł/ha, młody rolnik ${fmt(mlody)} zł/ha. Pełna tabela stawek 2024/2025, kalkulator dopłat na hektar i FAQ.`}
   noHreflang={true}
 >
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(jsonLd)} />
 
   <div class="db">
     <div class="db-wrap">
@@ -228,7 +229,7 @@ const groups: { title: string; rows: Row[]; areaUnit: string }[] = [
     </div>
   </div>
 
-  <script type="application/json" id="dbRates" set:html={JSON.stringify({ pwd, redys })} />
+  <script type="application/json" id="dbRates" set:html={safeJsonLd({ pwd, redys })} />
   <script is:inline>
     (function () {
       var cfg = JSON.parse(document.getElementById('dbRates').textContent);

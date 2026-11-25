@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../lib/json-ld';
 export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import { breadcrumbSchema, faqPageSchema, howToSchema } from '../../lib/structured-data';
@@ -81,10 +82,10 @@ const articleJsonLd = {
 ---
 
 <Layout title={isSk ? "Ako vybrať lis na balíky (2026) — okrúhly vs hranolový" : "Jak vybrat lis na balíky (2026) — kulatý vs hranolový"} description={isSk ? "Sprievodca výberom lisu na balíky pre strednú farmu. Okrúhly vs hranolový, net wrap vs povraz, kombi s wrapperom, top značky 2026." : "Průvodce výběrem lisu na balíky pro CZ farmu. Kulatý vs hranolový, net wrap vs provázek, kombi s wrapperem, top značky 2026."} canonical={canonical} ogType="article" publishedTime={datePublished}>
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(articleJsonLd)} />
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(howToJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(articleJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(faqJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(howToJsonLd)} />
 
   {isSk ? (
   <article class="g-root">

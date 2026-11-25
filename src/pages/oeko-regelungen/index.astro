@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../lib/json-ld';
 // src/pages/oeko-regelungen/index.astro
 // DE-only landing: Öko-Regelungen (dobrovolné ekoschémata 1. pilíře GAP v Německu).
 // Jurisdikčně vázané na DE, obsah přímo německy. Non-de locale → 404.
@@ -127,7 +128,7 @@ const jsonLd = {
   description={`Die Öko-Regelungen mit ihren Einheitsbeträgen: 2025 endgültig laut Bundesanzeiger, 2026 geplant. ÖR 1a bis ${fmt(maxBetrag)} €/ha, Blühstreifen 200 €/ha, Agroforst 2026 600 €/ha. Staffelung, Regeln und FAQ.`}
   noHreflang={true}
 >
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(jsonLd)} />
 
   <div class="db">
     <div class="db-wrap">

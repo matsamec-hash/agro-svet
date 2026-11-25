@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../lib/json-ld';
 // SSR — sekce je launchnutá pro pl a prerendered stránka pod locale prefixem
 // skončí ForbiddenRewrite → 302 na cs. Data statická, render levný, CF cachuje.
 export const prerender = false;
@@ -31,8 +32,8 @@ const list = itemListSchema(
   title={tr('plod.hub.title')}
   description={tf(locale, 'plod.hub.desc', { crops: plodiny.length, varieties: totalOdrudy })}
 >
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumb)} />
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(list)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumb)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(list)} />
 
   <div class="pl-hub">
     <nav class="breadcrumb" aria-label="Cesta">

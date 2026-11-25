@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../lib/json-ld';
 // src/components/statistiky/HexMap.astro
 import type { RegionCrop } from '../../lib/czso';
 
@@ -107,7 +108,7 @@ const VB_H = Y_OFFSET * 2 + (maxRow + 1) * HEX_H;
   </div>
 </section>
 
-<script type="application/json" id="hexMapData" set:html={JSON.stringify({ data, defaultYear: latestYear })}></script>
+<script type="application/json" id="hexMapData" set:html={safeJsonLd({ data, defaultYear: latestYear })}></script>
 
 <style>
   .sp-section{margin:32px 0 36px;scroll-margin-top:200px}

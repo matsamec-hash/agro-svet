@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../../lib/json-ld';
 // SSR (prerender:false) → middleware servíruje lokalizovanú /sk verziu cez
 // locals.locale. cs výstup sémanticky identický.
 export const prerender = false;
@@ -35,8 +36,8 @@ const faqJsonLd = faqPageSchema(faqItems);
   canonical={locale === 'cs' ? canonical : undefined}
   titleMaxLength={TITLE_MAX}
 >
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(faqJsonLd)} />
 
   <div class="ph-page">
     <nav class="breadcrumb" aria-label={cr.nav}>

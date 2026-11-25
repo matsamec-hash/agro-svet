@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../../../lib/json-ld';
 // Landing kombinace typ × kraj — nejjemnější long-tail
 // ("farmářské trhy Jihočeský kraj"). Zpravidla noindex (málo akcí), ale
 // přístupné pro UX a crawl + interní prolinkování.
@@ -49,8 +50,8 @@ const collectionJsonLd = {
   noindex={noindex}
   noHreflang
 >
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(collectionJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(collectionJsonLd)} />
   <AkceLanding
     title={`${label} — ${kraj.name}`}
     intro={intro}

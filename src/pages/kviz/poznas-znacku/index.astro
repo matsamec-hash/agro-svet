@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../../lib/json-ld';
 // Kvíz „Poznáš značku?" — cs-only interaktivní hra postavená nad katalogem strojů.
 // Engagement + interní prolinkování na /stroje/. Non-cs locale (není v LAUNCHED_PREFIXES)
 // → self-canonical, žádné hreflang alternates (noHreflang).
@@ -60,9 +61,9 @@ const gameJsonLd = {
 ---
 
 <Layout title={title} description={metaDescription} canonical={canonical} noHreflang={true} ogImage={ogImage}>
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(gameJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(faqJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(gameJsonLd)} />
 
   <div class="kviz-page">
     <nav class="kviz-crumbs" aria-label="Drobečková navigace">

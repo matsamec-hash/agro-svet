@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../../lib/json-ld';
 export const prerender = false;
 import Layout from '../../../layouts/Layout.astro';
 import { machines } from '../../../lib/historie';
@@ -37,8 +38,8 @@ const itemListLd = {
   noindex={csOnly}
   noHreflang={true}
 >
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbLd)} />
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(itemListLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumbLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(itemListLd)} />
   <div class="ht">
     <h1>Historická technika</h1>
     <p class="ht-lede">Stroje, které vozily úrodu z polí JZD i státních statků — od poválečného Zetoru 25 po výkonné kombajny éry velkovýroby. {tractors.length} traktorů a {combines.length} kombajny s fotografiemi, technickými údaji a příběhem.</p>

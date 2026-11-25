@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../lib/json-ld';
 export const prerender = true;
 import Layout from '../../layouts/Layout.astro';
 import { ZNACKA_LOGO } from '../../lib/agro-integrace';
@@ -62,8 +63,8 @@ function websiteHost(url: string | undefined): string {
   description="Rozcestník prodejců zemědělské techniky v Česku. Oficiální zastoupení, dealerské sítě a katalog modelů pro 22 značek traktorů, kombajnů a strojů."
   canonical={canonical}
 >
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(itemListJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(itemListJsonLd)} />
 
   <div class="dealers-page">
     <nav class="breadcrumb" aria-label="Cesta">

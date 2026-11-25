@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../lib/json-ld';
 export const prerender = true;
 import Layout from '../../layouts/Layout.astro';
 import { SITE_URL } from '../../lib/config';
@@ -65,9 +66,9 @@ const faqJsonLd = article.faq.length > 0 ? {
   ogImage={article.featured_image_url}
   canonical={canonical}
 >
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(articleJsonLd)} />
-  {faqJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />}
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(articleJsonLd)} />
+  {faqJsonLd && <script type="application/ld+json" is:inline set:html={safeJsonLd(faqJsonLd)} />}
 
   <article class="hl-article">
     <nav class="breadcrumb" aria-label="Cesta">

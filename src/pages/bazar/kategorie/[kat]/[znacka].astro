@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../../../lib/json-ld';
 // Path-based category × brand landing page — long-tail SEO target:
 // "ojeté traktory Zetor", "kombajny Claas bazar". Mirrors the category page
 // one level deeper.
@@ -84,9 +85,9 @@ Astro.response.headers.set('Cache-Control', 'public, max-age=300, s-maxage=600, 
   canonical={canonical}
   noindex={count === 0}
 >
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumbJsonLd)} />
   {count > 0 && (
-    <script type="application/ld+json" is:inline set:html={JSON.stringify(itemListJsonLd)} />
+    <script type="application/ld+json" is:inline set:html={safeJsonLd(itemListJsonLd)} />
   )}
 
   <div class="cat-root">

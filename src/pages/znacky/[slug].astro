@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../lib/json-ld';
 export const prerender = false;
 import PhotoCredits from '../../components/PhotoCredits.astro';
 import Layout from '../../layouts/Layout.astro';
@@ -167,8 +168,8 @@ const modelListJsonLd = brandModels.length > 0
 ---
 
 <Layout title={pageTitle} description={znacka.data.popis} canonical={canonical} ogImage={`https://agro-svet.cz/og/znacka-${znacka.id}.png`}>
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
-  {modelListJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(modelListJsonLd)} />}
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(jsonLd)} />
+  {modelListJsonLd && <script type="application/ld+json" is:inline set:html={safeJsonLd(modelListJsonLd)} />}
   <div style="max-width:860px; margin:0 auto; padding:48px 32px 96px;">
 
     <div style="font-size:13px; color:#666; margin-bottom:28px;">

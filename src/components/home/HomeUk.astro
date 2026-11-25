@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../lib/json-ld';
 // Ukrajinská homepage. Do 2026-09-10 to byl holý rozcestník s 19 stejnými
 // dlaždicemi, zatímco cs/sk/pl/de jsou magazín — poslední jazyk, kterému to
 // zbylo. Teď stejná kostra jako ostatní: zpravodajský hero → obrázkový
@@ -146,7 +147,7 @@ const itemListJsonLd = homepageItems.length > 0 ? {
   preloadHeroSizes="(max-width: 900px) 100vw, 800px"
   preloadHeroMaxWidth={800}
 >
-  {itemListJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(itemListJsonLd)} />}
+  {itemListJsonLd && <script type="application/ld+json" is:inline set:html={safeJsonLd(itemListJsonLd)} />}
 
   <h1 class="visually-hidden">Аграрний світ — техніка, дані та довідник для сільського господарства України</h1>
 

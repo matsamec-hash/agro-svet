@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../lib/json-ld';
 // src/pages/data/index.astro
 // Rozcestník datové sekce (hub). Sdružuje živá česká data, mezinárodní srovnání
 // a nástroje do tří clusterů. Data jsou precomputed v src/data/agro-stats{,-sk}.json
@@ -250,7 +251,7 @@ const heroDeltaTitle = locale === 'sk' ? 'Zmena za zobrazené obdobie (24 mesiac
     </div></div>
   </div>
 
-  <script type="application/json" id="dhChartData" set:html={JSON.stringify({ series: heroSeries, numLocale })} />
+  <script type="application/json" id="dhChartData" set:html={safeJsonLd({ series: heroSeries, numLocale })} />
   <script src="/scripts/data-hub.js" is:inline></script>
   {/* Fotodlaždice jsou pod CC BY-SA — jméno autora k nim patří. */}
   <PhotoCredits images={['/images/data-hub/trhy-komodity.webp', '/images/data-hub/zemedelska-puda.webp', '/images/data-hub/profily-zemi.webp', '/images/data-hub/srovnani-zemi.webp', '/images/data-hub/kalkulacka-cap.webp', '/images/data-hub/dotace.webp']} />

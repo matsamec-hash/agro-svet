@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../lib/json-ld';
 import { getAllBrands, seriesFamily, familyLabel, type StrojKategorie } from '../../lib/stroje';
 import { ZNACKA_LOGO } from '../../lib/agro-integrace';
 import { creditFor, licenseUrlFor, requiresAuthor, type PhotoCredit } from '../../lib/photo-credit';
@@ -531,7 +532,7 @@ const NL = '\n';
     </div>
   </section>
 
-  <script type="application/json" id="cb-i18n" set:html={JSON.stringify(js)} />
+  <script type="application/json" id="cb-i18n" set:html={safeJsonLd(js)} />
 
 </div>
 

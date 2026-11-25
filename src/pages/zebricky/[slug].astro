@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../lib/json-ld';
 // SSR — viz zebricky/index.astro (locale prefix a prerender se vylučují).
 export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
@@ -71,9 +72,9 @@ function yearRange(m: typeof ranked[number]['model']): string {
 ---
 
 <Layout title={def.title} description={def.description} canonical={pageUrl} ogType="article">
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(itemListJsonLd)} />
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(articleJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(itemListJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(articleJsonLd)} />
 
   <div class="zeb-detail-root">
     <nav class="breadcrumb" aria-label="Cesta">

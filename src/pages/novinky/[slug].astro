@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../lib/json-ld';
 import Layout from '../../layouts/Layout.astro';
 import Newsletter from '../../components/Newsletter.astro';
 import { createAnonClient } from '../../lib/supabase';
@@ -250,7 +251,7 @@ const jsonLd = {
   {locale === 'cs' && seznamImageSource(article.featured_image_url) && (
     <meta slot="head" name="szn:image" content={seznamImageUrl(article.slug)} data-description={photoCreditLine(heroCredit) || undefined} />
   )}
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(jsonLd)} />
 
   <div style="max-width:780px; margin:0 auto; padding:48px 32px 96px;">
 

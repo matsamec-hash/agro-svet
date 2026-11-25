@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../../../lib/json-ld';
 export const prerender = false;
 import Layout from '../../../../layouts/Layout.astro';
 import { getSeries, seriesFamily, familyLabel, categoryLabel, type StrojKategorie } from '../../../../lib/stroje';
@@ -136,8 +137,8 @@ const catDisplayLabel = categoryLabels[category] ?? categoryLabel(series.subcate
   title={tf(locale, 'cat.s.d.s.title', { brand: brand.name, series: series.name })}
   description={tf(locale, 'cat.s.d.s.desc', { brand: brand.name, series: series.name, hp: hpRange || '—', yr: yr || '—' })}
 >
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
-  {modelListJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(modelListJsonLd)} />}
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(jsonLd)} />
+  {modelListJsonLd && <script type="application/ld+json" is:inline set:html={safeJsonLd(modelListJsonLd)} />}
   <div class="series-page">
 
     <nav class="breadcrumb" aria-label={tr('cat.s.d.bcAria')}>

@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../../lib/json-ld';
 // Lokální landing per kraj — listing bazar inzerátů, prodejci, lokální
 // info. Long-tail SEO target: "bazar traktor Jihočeský kraj", "kde koupit
 // traktor v Plzeňském kraji".
@@ -68,8 +69,8 @@ Astro.response.headers.set('Cache-Control', 'public, max-age=300, s-maxage=600, 
   description={`${count > 0 ? count + ' aktivních inzerátů' : 'Aktuální inzeráty'} zemědělské techniky v ${kraj.name}. Traktory, kombajny, stroje, zvířata i příslušenství od soukromých prodejců i dealerů.`}
   canonical={canonical}
 >
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(collectionJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(collectionJsonLd)} />
 
   <div class="kraj-root">
     <nav class="breadcrumb" aria-label="Cesta">

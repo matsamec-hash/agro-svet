@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../../lib/json-ld';
 // Landing podle kraje — long-tail SEO ("zemědělské akce Jihočeský kraj").
 export const prerender = false;
 
@@ -47,8 +48,8 @@ const collectionJsonLd = {
   noindex={noindex}
   noHreflang
 >
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(collectionJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(collectionJsonLd)} />
   <AkceLanding
     title={`Zemědělské akce — ${kraj.name}`}
     intro={intro}

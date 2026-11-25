@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../../../../../lib/json-ld';
 // SSR (prerender=false): stránka se renderuje i pod /sk /uk /pl (middleware rewrite
 // na cs routu s locals.locale) — prerendered by pod locale prefixem 404/302-leakla.
 export const prerender = false;
@@ -162,7 +163,7 @@ const jsonLd = {
   title={tf(locale, 'cat.rada.title', { brand: brand.name, label, cat: catLabel.toLowerCase() })}
   description={tf(locale, 'cat.rada.desc', { cat: catLabel.toLowerCase(), brand: brand.name, label, n: totalModels })}
 >
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(jsonLd)} />
   <div class="rada-page">
 
     <nav class="breadcrumb" aria-label="Cesta">

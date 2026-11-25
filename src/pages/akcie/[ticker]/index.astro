@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../../lib/json-ld';
 // prerender=false (SSR): launchnuté ne-cs locale servíruje middleware rewrite,
 // který prerendered routy nepokrývá. Proto žádné getStaticPaths — ticker se
 // hledá z Astro.params a neznámý vrací 404.
@@ -63,8 +64,8 @@ const orgJsonLd = {
   description={metaDescription}
   canonical={locale === 'cs' ? canonical : undefined}
 >
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(orgJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(orgJsonLd)} />
 
   <div class="ad">
     <section class="ad-hero">

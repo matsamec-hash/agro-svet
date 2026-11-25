@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../lib/json-ld';
 // Interaktivní choropleth mapa evropských zemí pro /svet/mapa/.
 // Vzor: RegionMap.astro — inline SVG server-rendered (SSR vybarví výchozí metriku
 // pro SEO/no-JS), klient jen přepíná metriku + zoom/pan + tooltip + panel.
@@ -125,8 +126,8 @@ const payload = { metrics, countries: countriesWithPage };
   </div>
 
   <div class="agrimap-tip" id="agrimap-tip" hidden></div>
-  <script type="application/json" id="agrimap-data" set:html={JSON.stringify(payload)}></script>
-  <script type="application/json" id="agrimap-ui" set:html={JSON.stringify({ ...UI, homeCode, numLocale, detailBase })}></script>
+  <script type="application/json" id="agrimap-data" set:html={safeJsonLd(payload)}></script>
+  <script type="application/json" id="agrimap-ui" set:html={safeJsonLd({ ...UI, homeCode, numLocale, detailBase })}></script>
 </section>
 
 <script>

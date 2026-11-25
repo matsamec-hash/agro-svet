@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../../../lib/json-ld';
 // SSR — tagy nemají fixní enum, vznikají dynamicky z článků. Pro prerender
 // by se musely query všechny tagy build-time + getStaticPaths(). Pro nyní SSR.
 export const prerender = false;
@@ -106,8 +107,8 @@ const collectionJsonLd = {
 ---
 
 <Layout title={pageTitle} description={pageDesc}>
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(collectionJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(collectionJsonLd)} />
   <div style="max-width:1280px; margin:0 auto; padding:48px 32px 80px;">
     <div style="margin-bottom:8px; font-size:13px; color:#666;">
       <a href={localizePath(locale, '/novinky/')} style="color:#666; text-decoration:none;">{t(locale, 'nov.breadcrumb')}</a>

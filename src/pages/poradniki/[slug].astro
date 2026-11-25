@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../lib/json-ld';
 // PL-only detail poradniku (SSR, prerender:false). Middleware rewritne
 // /pl/poradniki/<slug>/ → tuto routu s locale=pl. Non-pl → 404. Obsah polsky.
 export const prerender = false;
@@ -74,10 +75,10 @@ const articleJsonLd = {
 ---
 
 <Layout title={item.data.title} description={item.data.description} canonical={pageUrl} ogType="article" noHreflang={true}>
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(howToJsonLd)} />
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(articleJsonLd)} />
-  {faqJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />}
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(howToJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(articleJsonLd)} />
+  {faqJsonLd && <script type="application/ld+json" is:inline set:html={safeJsonLd(faqJsonLd)} />}
 
   <div style="max-width:860px; margin:0 auto; padding:48px 32px 96px;">
 

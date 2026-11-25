@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../lib/json-ld';
 // Choropleth mapa regionů země pro /svet/[slug]/. Server-rendered inline SVG
 // (near-zero JS): SSR vybarví výchozí metriku, klient jen přepíná metriku + tooltip.
 // Data: {slug}-geo.json (SVG paths) + {slug}.json (hodnoty metrik per région).
@@ -91,7 +92,7 @@ const ariaTpl = regionMapAria(locale, countryName, '{metric}');
     </aside>
   </div>
 
-  <script type="application/json" id="svet-map-data" set:html={JSON.stringify({ regions: data.regions, metrics: metricsL, noData: RU.noData, ariaTpl })}></script>
+  <script type="application/json" id="svet-map-data" set:html={safeJsonLd({ regions: data.regions, metrics: metricsL, noData: RU.noData, ariaTpl })}></script>
   <script>
     import { colorFor, extent } from '../../lib/svet/mapcolor';
     interface Metric { key: string; label: string; unit: string; desc?: string; }

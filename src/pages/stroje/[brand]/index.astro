@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../../lib/json-ld';
 export const prerender = false;
 import Layout from '../../../layouts/Layout.astro';
 import { ZNACKA_LOGO } from '../../../lib/agro-integrace';
@@ -314,9 +315,9 @@ const seriesListJsonLd = allSeries.length > 0
   title={tf(locale, 'cat.b.title', { brand: brand.name })}
   description={tf(locale, 'cat.b.desc', { brand: brand.name, country: brand.country, founded: brand.founded, models: totalModels, series: totalSeries })}
 >
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(brandJsonLd)} />
-  {seriesListJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(seriesListJsonLd)} />}
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(brandJsonLd)} />
+  {seriesListJsonLd && <script type="application/ld+json" is:inline set:html={safeJsonLd(seriesListJsonLd)} />}
   <div class="brand-page">
 
     <nav class="breadcrumb" aria-label={tr('cat.bcAria')}>
@@ -606,7 +607,7 @@ const seriesListJsonLd = allSeries.length > 0
       </div>
     </section>
 
-    <script type="application/json" id="bp-i18n" set:html={JSON.stringify({ one: tr('cat.b.jsRowOne'), few: tr('cat.b.jsRowFew'), many: tr('cat.b.jsRowMany') })} />
+    <script type="application/json" id="bp-i18n" set:html={safeJsonLd({ one: tr('cat.b.jsRowOne'), few: tr('cat.b.jsRowFew'), many: tr('cat.b.jsRowMany') })} />
 
   </div>
   {/* Loga značek: většina je PD (text a jednoduché tvary), ale Bednar

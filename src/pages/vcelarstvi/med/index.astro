@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../../lib/json-ld';
 export const prerender = false;
 import Layout from '../../../layouts/Layout.astro';
 import PhotoCredits from '../../../components/PhotoCredits.astro';
@@ -48,8 +49,8 @@ const collectionJsonLd = {
 ---
 
 <Layout title={title} description={description}>
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(collectionJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(collectionJsonLd)} />
 
   <div class="med-listing-root">
 

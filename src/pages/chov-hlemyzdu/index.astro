@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../lib/json-ld';
 export const prerender = true;
 import Layout from '../../layouts/Layout.astro';
 import { SITE_URL } from '../../lib/config';
@@ -47,8 +48,8 @@ const collectionJsonLd = {
 ---
 
 <Layout title={title} description={description} ogImage={pillar.featured_image_url}>
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(collectionJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(collectionJsonLd)} />
 
   <div class="hl-hub">
     <nav class="breadcrumb" aria-label="Cesta">

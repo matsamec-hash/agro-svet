@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../lib/json-ld';
 // Znovupoužitelná kalkulačka návratnosti stroje (koupit vs. platit službu).
 // Řízená per-stroj configem z i18n/kalkulacka/navratnost.ts.
 import type { NavratnostContent, MachineDefaults } from '../../i18n/kalkulacka/navratnost';
@@ -157,7 +158,7 @@ const calcCfg = {
 </section>
 </div>
 
-<script type="application/json" id="calc-cfg" set:html={JSON.stringify(calcCfg)}></script>
+<script type="application/json" id="calc-cfg" set:html={safeJsonLd(calcCfg)}></script>
 
 <style>
   .calc-page {

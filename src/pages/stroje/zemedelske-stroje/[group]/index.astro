@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../../../lib/json-ld';
 // SSR (prerender=false): renderuje se i pod /sk /uk /pl (middleware rewrite na cs
 // routu s locals.locale) — prerendered by pod locale prefixem 302-leakla na cs.
 export const prerender = false;
@@ -60,8 +61,8 @@ const subcatListJsonLd = subcatsWithModels.length > 0
   title={tf(locale, 'cat.zem.groupTitle', { group: groupName })}
   description={tf(locale, 'cat.zem.groupDesc', { group: groupName, n: groupModels.length, b: groupBrands.length })}
 >
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
-  {subcatListJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(subcatListJsonLd)} />}
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumbJsonLd)} />
+  {subcatListJsonLd && <script type="application/ld+json" is:inline set:html={safeJsonLd(subcatListJsonLd)} />}
   <div style="max-width:1280px; margin:0 auto; padding:48px 32px 80px;">
     <div style="margin-bottom:8px;">
       <a href={localizePath(locale, '/stroje/zemedelske-stroje/')} style="font-size:13px; color:#666; text-decoration:none;">← {tr('cat.zem.back')}</a>

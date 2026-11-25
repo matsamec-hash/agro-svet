@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../../lib/json-ld';
 import { ceskaVerzeNebo404 } from '../../../i18n/utils';
 export const prerender = false;
 import Layout from '../../../layouts/Layout.astro';
@@ -53,8 +54,8 @@ const articleLd = {
   ogType="article"
   noHreflang={true}
 >
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbLd)} />
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(articleLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumbLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(articleLd)} />
   <div class={`ml era-${e}`}>
     <nav class="ml-crumb"><a href="/historie/">← Historie českého zemědělství</a></nav>
 

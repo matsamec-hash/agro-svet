@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../lib/json-ld';
 // SSR (prerender:false): middleware servíruje /sk verzi přes locals.locale.
 // sk čte z plemena-sk overlay (getAllDruhy('sk')); cs render = dnešní literály
 // VERBATIM (byte-identita). Locale z Astro.locals.locale (po rewritu je Astro.url cs).
@@ -97,8 +98,8 @@ const plemenaI18n = JSON.stringify({
   title={t('plem.idx.title')}
   description={t('plem.idx.description')}
 >
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(collectionJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(collectionJsonLd)} />
   <div class="plemena-root">
 
     <nav class="breadcrumb" aria-label="Cesta">

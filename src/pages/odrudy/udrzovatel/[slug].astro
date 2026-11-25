@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../../lib/json-ld';
 export const prerender = true;
 import Layout from '../../../layouts/Layout.astro';
 import { listIndexableUdrzovatele, getUdrzovatel, isOdrudaIndexable } from '../../../lib/plodiny';
@@ -28,8 +29,8 @@ const list = itemListSchema(
 ---
 
 <Layout title={`${u.name} — registrované odrůdy`} description={`Přehled registrovaných odrůd udržovatele ${u.name.replace(/\.$/, '')}.`}>
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumb)} />
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(list)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumb)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(list)} />
 
   <div class="pl-udrzovatel">
 

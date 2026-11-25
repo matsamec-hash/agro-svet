@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../../lib/json-ld';
 // SSR — viz plodiny/index.astro (locale prefix a prerender se vylučují).
 export const prerender = false;
 import Layout from '../../../layouts/Layout.astro';
@@ -79,11 +80,11 @@ const list = plodina.odrudy.length > 0
   description={tf(locale, 'plod.d.desc', { name: plodina.name, count: plodina.odrudy.length })}
   ogImage={`https://agro-svet.cz/og/plodiny-${plodina.slug}.png`}
 >
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumb)} />
-  {howTo && <script type="application/ld+json" is:inline set:html={JSON.stringify(howTo)} />}
-  {faq && <script type="application/ld+json" is:inline set:html={JSON.stringify(faq)} />}
-  {list && <script type="application/ld+json" is:inline set:html={JSON.stringify(list)} />}
-  {heroImageSchema && <script type="application/ld+json" is:inline set:html={JSON.stringify(heroImageSchema)} />}
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumb)} />
+  {howTo && <script type="application/ld+json" is:inline set:html={safeJsonLd(howTo)} />}
+  {faq && <script type="application/ld+json" is:inline set:html={safeJsonLd(faq)} />}
+  {list && <script type="application/ld+json" is:inline set:html={safeJsonLd(list)} />}
+  {heroImageSchema && <script type="application/ld+json" is:inline set:html={safeJsonLd(heroImageSchema)} />}
 
   <div class="pl-detail">
 

@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../../lib/json-ld';
 export const prerender = true;
 import Layout from '../../../layouts/Layout.astro';
 import { breadcrumbSchema } from '../../../lib/structured-data';
@@ -20,7 +21,7 @@ const breadcrumbJsonLd = breadcrumbSchema([
   description="Vytvořte si filtr (značka, kategorie, cena, kraj) a denně dostávejte e-mail s novými inzeráty, které mu odpovídají."
   canonical={canonical}
 >
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumbJsonLd)} />
 
   <div class="sled-root">
     <nav class="breadcrumb" aria-label="Cesta">

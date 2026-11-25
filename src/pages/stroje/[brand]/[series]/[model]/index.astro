@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../../../../lib/json-ld';
 export const prerender = false;
 import Layout from '../../../../../layouts/Layout.astro';
 import { getAllBrands, getAllModels, getSeries, seriesFamily, familyLabel, categoryLabel, type StrojKategorie, type StrojModel } from '../../../../../lib/stroje';
@@ -385,11 +386,11 @@ function competitorUrlPart(competitor: { slug: string; brand_slug: string }): st
 ---
 
 <Layout title={seoTitle} titleMaxLength={TITLE_MAX} description={pageDesc} canonical={canonical} ogImage={heroPhoto} ogType="product">
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(productJsonLd)} />
-  {offerJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(offerJsonLd)} />}
-  {faqJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />}
-  {videoJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(videoJsonLd)} />}
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(productJsonLd)} />
+  {offerJsonLd && <script type="application/ld+json" is:inline set:html={safeJsonLd(offerJsonLd)} />}
+  {faqJsonLd && <script type="application/ld+json" is:inline set:html={safeJsonLd(faqJsonLd)} />}
+  {videoJsonLd && <script type="application/ld+json" is:inline set:html={safeJsonLd(videoJsonLd)} />}
   <div class="model-page">
 
     <nav class="breadcrumb" aria-label={tr('cat.s.d.bcAria')}>

@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../lib/json-ld';
 // SSR (prerender:false) tak, aby middleware mohlo servírovať lokalizovanú /sk
 // verziu cez locals.locale. cs výstup zostáva identický (rovnaký kód komponenty).
 export const prerender = false;
@@ -84,8 +85,8 @@ const js = {
   description={tf(locale, 'cat.sr.desc', { pairs: pairs.length })}
   canonical={canonical}
 >
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(itemListJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(itemListJsonLd)} />
 
   <div class="hub">
 

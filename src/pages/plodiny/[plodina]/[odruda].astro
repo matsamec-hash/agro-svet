@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../../lib/json-ld';
 export const prerender = true;
 import Layout from '../../../layouts/Layout.astro';
 import { listIndexableOdrudy, getPlodina, getOdruda, isOdrudaIndexable, udrzovatelHref, SKUPINA_LABELS } from '../../../lib/plodiny';
@@ -116,9 +117,9 @@ const metaDescription = truncateAtBoundary(
   description={metaDescription}
   ogImage={`https://agro-svet.cz/og/plodiny-${plodina.slug}.png`}
 >
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumb)} />
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(dataset)} />
-  {faq && <script type="application/ld+json" is:inline set:html={JSON.stringify(faq)} />}
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumb)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(dataset)} />
+  {faq && <script type="application/ld+json" is:inline set:html={safeJsonLd(faq)} />}
 
   <div class="pl-detail">
 

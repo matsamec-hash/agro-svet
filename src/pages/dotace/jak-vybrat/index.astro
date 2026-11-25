@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../../lib/json-ld';
 export const prerender = false;
 import Layout from '../../../layouts/Layout.astro';
 import { breadcrumbSchema, itemListSchema } from '../../../lib/structured-data';
@@ -30,8 +31,8 @@ const itemListJsonLd = itemListSchema(
 ---
 
 <Layout title={jv.metaTitle} description={jv.metaDescription} canonical={canonical}>
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(itemListJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(itemListJsonLd)} />
 
   <div class="jakvybrat-page">
     <nav class="breadcrumb" aria-label="Cesta">

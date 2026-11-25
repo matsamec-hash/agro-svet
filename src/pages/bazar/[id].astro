@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../lib/json-ld';
 import Layout from '../../layouts/Layout.astro';
 import BazarGallery from '../../components/bazar/BazarGallery.astro';
 import { CATEGORIES, BRANDS, SHOW_LISTING_VIEWS } from '../../lib/bazar-constants';
@@ -148,8 +149,8 @@ const breadcrumbJsonLd = breadcrumbSchema([
 ---
 
 <Layout title={`${listing.title} — Agro bazar`} ogImage={images[0]?.url} ogType="product" noindex={noindexListing}>
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(productJsonLd)} />
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(productJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumbJsonLd)} />
   <div style="max-width:1000px; margin:0 auto; padding:32px 24px 80px;">
 
     {isPreview && (

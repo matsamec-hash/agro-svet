@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../lib/json-ld';
 export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import { getSlovnik, getSlovnikTerm, getKategorieLabels, slovnikMetaDescription, slovnikSeoTitle, SLOVNIK_AREA_UNIT_BY_SLUG, SLOVNIK_WEIGHT_UNIT_BY_SLUG } from '../../lib/slovnik';
@@ -135,9 +136,9 @@ const showsCzk = locale !== 'cs' && /Kč/.test(
   canonical={pageUrl}
   ogType="article"
 >
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(definedTermJsonLd)} />
-  {faqJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />}
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(definedTermJsonLd)} />
+  {faqJsonLd && <script type="application/ld+json" is:inline set:html={safeJsonLd(faqJsonLd)} />}
 
   <article class="slv-detail-root">
     <nav class="breadcrumb" aria-label="Cesta">

@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../../../lib/json-ld';
 // SSR (ne prerender) — locale rewrite (/sk/...) běží přes middleware jen pro
 // ne-prerendered routy. Validace proti fixnímu enumu kategorií za běhu.
 export const prerender = false;
@@ -86,8 +87,8 @@ const topTags = [...tagCounts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 16
 ---
 
 <Layout title={`${label} — agro-svět.cz`} description={description}>
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(collectionJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(collectionJsonLd)} />
   <div style="max-width:1280px; margin:0 auto; padding:48px 32px 80px;">
     <nav class="kat-breadcrumb" aria-label={t(locale, 'nov.breadcrumbAria')}>
       <a href={localizePath(locale, '/novinky/')}>{t(locale, 'nov.breadcrumb')}</a>

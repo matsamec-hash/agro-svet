@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../lib/json-ld';
 // src/pages/direktzahlungen/index.astro
 // DE-only landing: Direktzahlungen (přímé platby GAP v Německu) — Einheitsbeträge
 // 2025 (final) vs 2026 (geplant), kalkulačka €/ha, tabulky, FAQ. Jurisdikčně
@@ -97,7 +98,7 @@ const groups: { title: string; rows: Row[] }[] = [
   description={`Die finalen Einheitsbeträge der Direktzahlungen für das Antragsjahr 2025: Einkommensgrundstützung ${fmt(grund)} €/ha, Umverteilung ${fmt(umv40)} €/ha (1.–40. ha), Junglandwirte ${fmt(jung)} €/ha. Vollständige Tabelle 2025/2026, Prämienrechner je Hektar und FAQ.`}
   noHreflang={true}
 >
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(jsonLd)} />
 
   <div class="db">
     <div class="db-wrap">
@@ -261,7 +262,7 @@ const groups: { title: string; rows: Row[] }[] = [
     </div>
   </div>
 
-  <script type="application/json" id="dbRates" set:html={JSON.stringify({ grund, umv40, umv60 })} />
+  <script type="application/json" id="dbRates" set:html={safeJsonLd({ grund, umv40, umv60 })} />
   <script is:inline>
     (function () {
       var cfg = JSON.parse(document.getElementById('dbRates').textContent);

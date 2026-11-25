@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../lib/json-ld';
 // SSR: profil země se načítá podle slugu z URL. Dřív prerender=true + getStaticPaths,
 // jenže prerendered routy nejdou middleware-rewritnout pod /sk//pl/ (Astro Node SSR →
 // „unable to find a component instance" → 302 na cs). Pro launch /svet v sk/pl musí
@@ -132,8 +133,8 @@ const datasetJsonLd = datasetSchema({
 });
 ---
 <Layout title={title} description={description} canonical={pageUrl} ogImage={ogImage} ogType="article">
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(datasetJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(datasetJsonLd)} />
   <div class="svet-page svet-profile">
     <nav class="svet-crumbs" aria-label={t(locale, 'a11y.breadcrumb')}>
       <a href={localizePath(locale, '/')}>{L.bcHome}</a>

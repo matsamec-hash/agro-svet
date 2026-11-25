@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../lib/json-ld';
 export const prerender = true;
 import Layout from '../../layouts/Layout.astro';
 import { breadcrumbSchema } from '../../lib/structured-data';
@@ -108,7 +109,7 @@ const beesJson = JSON.stringify(BEES);
   description="4 otázky o vašich zkušenostech, prioritách a podmínkách → doporučení konkrétního včelího plemene (kraňka, italka, buckfast, kavkazská, tmavá včela) s vysvětlením proč."
   canonical={canonical}
 >
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumbJsonLd)} />
 
   <div class="jvp-root">
     <nav class="breadcrumb" aria-label="Cesta">

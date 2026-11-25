@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../../lib/json-ld';
 export const prerender = true;
 import Layout from '../../../layouts/Layout.astro';
 import Anketa from '../../../components/Anketa.astro';
@@ -44,8 +45,8 @@ const collectionJsonLd = {
   description="Kolik nových traktorů se registruje v ČR, Německu, Francii, Itálii, Polsku a UK? Reálná data z CEMA a národních úřadů, žebříčky značek a trendy. Průběžně doplňujeme."
   canonical={canonical}
 >
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(collectionJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(collectionJsonLd)} />
 
   <div class="pt">
     <!-- HERO -->

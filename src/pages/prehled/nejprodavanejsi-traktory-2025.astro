@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../lib/json-ld';
 export const prerender = true;
 import Layout from '../../layouts/Layout.astro';
 import { breadcrumbSchema } from '../../lib/structured-data';
@@ -36,8 +37,8 @@ const articleJsonLd = {
   publishedTime={datePublished}
   modifiedTime={dateModified}
 >
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(articleJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(articleJsonLd)} />
 
   <article class="article-root">
     <nav class="breadcrumb" aria-label="Cesta">

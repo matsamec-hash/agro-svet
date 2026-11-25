@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../lib/json-ld';
 import Layout from '../../layouts/Layout.astro';
 import ArticleCard from '../../components/ArticleCard.astro';
 import PhotoCredits from '../../components/PhotoCredits.astro';
@@ -131,8 +132,8 @@ const itemListJsonLd = sorted.length > 0 ? {
   title={activeLabel ? `${t(locale, 'nov.section')}: ${activeLabel}` : (query ? `${t(locale, 'nov.section')}: „${query}"` : t(locale, 'nov.section'))}
   description={activeLabel ? tf(locale, 'nov.desc.cat', { label: activeLabel }) : t(locale, 'nov.desc.default')}
 >
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
-  {itemListJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(itemListJsonLd)} />}
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumbJsonLd)} />
+  {itemListJsonLd && <script type="application/ld+json" is:inline set:html={safeJsonLd(itemListJsonLd)} />}
   <div style="max-width:1280px; margin:0 auto; padding:48px 32px 80px;">
 
     <div style="margin-bottom:24px;">

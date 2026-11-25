@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../lib/json-ld';
 export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import { milestones, machines, trivia } from '../../lib/historie';
@@ -48,8 +49,8 @@ const collectionLd = {
   noindex={csOnly}
   noHreflang={true}
 >
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbLd)} />
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(collectionLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumbLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(collectionLd)} />
   <div class="hh">
     <header class="hh-hero">
       <p class="hh-eyebrow">HISTORIE ČESKÉHO ZEMĚDĚLSTVÍ</p>

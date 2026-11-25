@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../lib/json-ld';
 // SSR (prerender:false) → middleware servíruje lokalizovanú /sk verziu cez
 // locals.locale. cs výstup identický (rovnaký kód). Canonical odvodí Layout.
 export const prerender = false;
@@ -106,8 +107,8 @@ const NL = '\n';
   title={tr('cat.s.title')}
   description={tr('cat.s.desc')}
 >
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(collectionJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(collectionJsonLd)} />
   <div class="catalog-root">
 
     <nav class="breadcrumb" aria-label={tr('cat.bcAria')}>
@@ -274,7 +275,7 @@ const NL = '\n';
 
   </div>
 
-  <script type="application/json" id="s-i18n" set:html={JSON.stringify(js)} />
+  <script type="application/json" id="s-i18n" set:html={safeJsonLd(js)} />
 
   <script>
     type CompactModel = {

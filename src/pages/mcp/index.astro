@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../lib/json-ld';
 // src/pages/mcp/index.astro
 // Veřejná dokumentace MCP serveru. Server běží na /api/mcp/ už delší dobu, ale
 // nikdo se o něm nemohl dozvědět: /api/ je zakázané v robots.txt, v llms.txt
@@ -83,7 +84,7 @@ const jsonLd = {
   canonical={pageUrl}
   noHreflang={true}
 >
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(jsonLd)} />
   <div class="mcp-page">
     <header class="mcp-hero">
       <span class="mcp-eyebrow">Pro vývojáře a AI asistenty</span>

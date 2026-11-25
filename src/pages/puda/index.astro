@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../lib/json-ld';
 // prerender=false (SSR): launchnuté SK sekce servíruje middleware rewrite, který
 // prerendered routy nepokrývá → SSR. Locale JEN z Astro.locals.locale (po rewrite
 // je Astro.url cs cesta). cs render = dnešní inline literály VERBATIM (byte-identita);
@@ -707,7 +708,7 @@ const donutSegs = struktura.map((s) => {
   .puda-tooltip strong { color: #FFFF00; }
 </style>
 
-<script type="application/json" id="puda-cfg" set:html={JSON.stringify({ numLocale: isSk ? 'sk-SK' : 'cs-CZ', currency: isSk ? '€/ha' : 'Kč/ha', isSk })} />
+<script type="application/json" id="puda-cfg" set:html={safeJsonLd({ numLocale: isSk ? 'sk-SK' : 'cs-CZ', currency: isSk ? '€/ha' : 'Kč/ha', isSk })} />
 <script is:inline>
   (function () {
     const CFG = JSON.parse(document.getElementById('puda-cfg')?.textContent || '{}');

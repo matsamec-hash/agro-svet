@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../lib/json-ld';
 // SSR — viz sezona/index.astro (locale prefix a prerender se vylučují).
 export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
@@ -38,9 +39,9 @@ const faqJsonLd = faqPageSchema(faq);
 ---
 
 <Layout title={title} description={description} canonical={pageUrl}>
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(itemListJsonLd)} />
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(itemListJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(faqJsonLd)} />
 
   <div class="sezona-root">
     <nav class="breadcrumb" aria-label="Cesta">

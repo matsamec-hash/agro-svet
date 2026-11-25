@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../lib/json-ld';
 import { ceskaVerzeNebo404 } from '../../i18n/utils';
 // Detail zemědělské akce — long-tail SEO stránka s Event JSON-LD.
 // Statické routy /akce/typ/ a /akce/kraj/ mají v Astro přednost, takže sem
@@ -85,8 +86,8 @@ const metaDesc = metaZaklad.length > 155 ? metaZaklad.slice(0, 152) + '…' : me
   ogImage={heroImage ?? undefined}
   noHreflang
 >
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(eventJsonLd)} />
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(eventJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumbJsonLd)} />
 
   <div class="akce-detail">
     <nav class="crumbs" aria-label="Drobečková navigace">
@@ -214,7 +215,7 @@ const metaDesc = metaZaklad.length > 155 ? metaZaklad.slice(0, 152) + '…' : me
       {images.length > 1 && <span class="lb-counter" id="lb-counter"></span>}
     </div>
   )}
-  <script type="application/json" id="akce-images-data" set:html={JSON.stringify(images)}></script>{/* galerie pro lightbox */}
+  <script type="application/json" id="akce-images-data" set:html={safeJsonLd(images)}></script>{/* galerie pro lightbox */}
 
   <script>
     const btn = document.getElementById('ics-btn');

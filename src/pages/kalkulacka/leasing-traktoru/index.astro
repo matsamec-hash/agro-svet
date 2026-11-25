@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../../lib/json-ld';
 // SSR (prerender:false) → middleware servíruje lokalizovanú /sk verziu cez
 // locals.locale. cs výstup sémanticky identický.
 export const prerender = false;
@@ -31,8 +32,8 @@ const faqJsonLd = faqPageSchema(faqItems);
   description={c.metaDescription}
   canonical={locale === 'cs' ? canonical : undefined}
 >
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(faqJsonLd)} />
 
   <div class="calc-page" data-providers={JSON.stringify(providers)}>
     <nav class="breadcrumb" aria-label="Cesta">
@@ -163,7 +164,7 @@ const faqJsonLd = faqPageSchema(faqItems);
       </div>
     </section>
 
-    <script type="application/json" id="calc-cfg" set:html={JSON.stringify(calcCfg)}></script>
+    <script type="application/json" id="calc-cfg" set:html={safeJsonLd(calcCfg)}></script>
   </div>
 </Layout>
 

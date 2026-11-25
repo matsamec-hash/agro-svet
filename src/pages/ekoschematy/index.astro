@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../lib/json-ld';
 // src/pages/ekoschematy/index.astro
 // PL-only landing: ekoschematy (eco-schemes) — stawki 2025, system punktowy,
 // tabele praktyk. Jurisdykčně vázané na PL → obsah přímo polsky (mirror doplaty).
@@ -105,7 +106,7 @@ const jsonLd = {
   description={`Aktualne stawki ekoschematów ARiMR za 2025 r.: Rolnictwo węglowe, Integrowana Produkcja Roślin, rośliny miododajne, Dobrostan zwierząt (krowy, owce, kozy, konie). Pełne tabele stawek zł/ha i zł/szt oraz system punktowy.`}
   noHreflang={true}
 >
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(jsonLd)} />
 
   <div class="db">
     <div class="db-wrap">

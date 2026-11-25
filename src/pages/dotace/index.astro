@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../lib/json-ld';
 // SSR (prerender:false) → middleware servíruje lokalizovanú /sk verziu cez
 // locals.locale. cs výstup sémanticky identický (Kč formátovanie zachované).
 export const prerender = false;
@@ -45,8 +46,8 @@ const statusLabel = c.statusLabel;
   description={c.metaDescription}
   canonical={locale === 'cs' ? canonical : undefined}
 >
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(itemListJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(itemListJsonLd)} />
 
   <div class="dotace-page">
     <nav class="breadcrumb" aria-label="Cesta">

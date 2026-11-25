@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../lib/json-ld';
 // src/components/statistiky/InputsBlock.astro
 import type { TimeSeriesPoint, FertilizerTimeSeries } from '../../lib/czso';
 import { useTranslations } from '../../i18n/utils';
@@ -33,7 +34,7 @@ const t = useTranslations(locale);
   </div>
 </section>
 
-<script type="application/json" id="inputsData" set:html={JSON.stringify({ fuelSeries, fertSeries })}></script>
+<script type="application/json" id="inputsData" set:html={safeJsonLd({ fuelSeries, fertSeries })}></script>
 
 <style>
   .sp-section{margin:32px 0 36px;scroll-margin-top:200px}

@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../lib/json-ld';
 // Německá homepage. Do 2026-09-10 to byl holý rozcestník (hero + 18 stejných
 // dlaždic), zatímco cs/sk jsou magazín — a bylo to na první pohled poznat.
 // Teď stejná kostra jako CZ/SK: zpravodajský hero → obrázkový rozcestník →
@@ -175,7 +176,7 @@ const itemListJsonLd = homepageItems.length > 0 ? {
   preloadHeroSizes="(max-width: 900px) 100vw, 800px"
   preloadHeroMaxWidth={800}
 >
-  {itemListJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(itemListJsonLd)} />}
+  {itemListJsonLd && <script type="application/ld+json" is:inline set:html={safeJsonLd(itemListJsonLd)} />}
 
   <h1 class="visually-hidden">Landmaschinen und Agrarförderung — Daten und Katalog</h1>
 

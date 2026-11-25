@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../../lib/json-ld';
 export const prerender = true;
 import Layout from '../../../layouts/Layout.astro';
 import { getAllFarms, getFarm, FARM_PRODUCTS, FARM_TYPES, regionName, regionsWithEnoughFarms } from '../../../lib/farmy';
@@ -50,8 +51,8 @@ const initial = farm.name.trim().charAt(0).toUpperCase();
   description={farm.description.slice(0, 155)}
   canonical={`https://agro-svet.cz/farmy/${farm.slug}/`}
 >
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(farmJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(farmJsonLd)} />
 
   <!-- Leaflet: vlastní kopie v /vendor (dřív unpkg = IP návštěvníka cizímu CDN bez souhlasu). -->
   <link

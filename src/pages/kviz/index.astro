@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../lib/json-ld';
 // SSR — pod ne-cs se seznam filtruje na kvízy, které v daném jazyce existují.
 export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
@@ -71,7 +72,7 @@ const quizCopy = (q: (typeof quizzes)[number]) =>
   description={tr('kvz.hub.desc')}
   canonical={canonical}
 >
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumbJsonLd)} />
 
   <div class="kviz-hub">
     <nav class="breadcrumb" aria-label="Cesta">

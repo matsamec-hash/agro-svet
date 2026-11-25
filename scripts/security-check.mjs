@@ -98,6 +98,17 @@ for (const f of files) {
   if (COST.test(text) && !authed && !limited) add('R3', 'FAIL', f, 0, 'veřejný endpoint volá placené API bez limitu')
 }
 
+// R7: JSON do <script> přes set:html bez escapování `<` (uložené XSS, `</script>` v textu od uživatele).
+for (const f of files) {
+  if (!/\.(astro|svelte|tsx|jsx)$/.test(f) || TEST.test(f)) continue
+  const text = read(f)
+  text.split('\n').forEach((l, i) => {
+    if (/set:html=\{\s*JSON\.stringify\(|dangerouslySetInnerHTML=\{\{\s*__html:\s*JSON\.stringify\(/.test(l)) {
+      add('R7', 'FAIL', f, i + 1, 'JSON.stringify do <script> bez escapování, použij safeJsonLd (lib/json-ld.ts)')
+    }
+  })
+}
+
 // R6: přesměrování na adresu z formuláře bez kontroly (open redirect). Jen varování.
 for (const f of files) {
   if (!CODE.test(f) || TEST.test(f)) continue

@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../lib/json-ld';
 export const prerender = true;
 import Layout from '../../layouts/Layout.astro';
 import { getAllFarms, regionsWithEnoughFarms, FARM_PRODUCTS, FARM_TYPES, productCounts, regionName } from '../../lib/farmy';
@@ -48,9 +49,9 @@ const listJsonLd = itemListSchema(
   description="Adresář vybraných farem prodávajících ze dvora — brambory, zelenina, mléko, maso, med a další. Filtrujte podle kraje, produktu a ekologického hospodaření."
   canonical="https://agro-svet.cz/farmy/"
 >
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(listJsonLd)} />
-  <script type="application/json" id="farmy-labels" is:inline set:html={JSON.stringify({ products: FARM_PRODUCTS, regions: regionLabels })} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(listJsonLd)} />
+  <script type="application/json" id="farmy-labels" is:inline set:html={safeJsonLd({ products: FARM_PRODUCTS, regions: regionLabels })} />
 
   <!-- Leaflet: vlastní kopie v /vendor (dřív unpkg = IP návštěvníka cizímu CDN bez souhlasu). -->
   <link

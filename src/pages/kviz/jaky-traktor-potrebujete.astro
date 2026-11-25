@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../lib/json-ld';
 export const prerender = true;
 import Layout from '../../layouts/Layout.astro';
 import { breadcrumbSchema } from '../../lib/structured-data';
@@ -68,7 +69,7 @@ const questions = [
   description="6 otázek o vaší farmě (velikost, typ, rozpočet, využití) → Top 5 doporučených traktorů z aktuálního katalogu. Skore podle výkonu, ceny, dostupnosti v ČR."
   canonical={canonical}
 >
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumbJsonLd)} />
 
   <div class="qr-root">
     <nav class="breadcrumb" aria-label="Cesta">

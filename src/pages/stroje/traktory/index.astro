@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../../lib/json-ld';
 export const prerender = false;
 import Layout from '../../../layouts/Layout.astro';
 import CategoryBrowse from '../../../components/stroje/CategoryBrowse.astro';
@@ -25,7 +26,7 @@ const brandListJsonLd = brandsWithTraktory.length > 0
   title={t('stroje.cat.traktory.title')}
   description={t('stroje.cat.traktory.desc')}
 >
-  <script type="application/ld+json" is:inline set:html={JSON.stringify({
+  <script type="application/ld+json" is:inline set:html={safeJsonLd({
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
@@ -34,6 +35,6 @@ const brandListJsonLd = brandsWithTraktory.length > 0
       { '@type': 'ListItem', position: 3, name: t('stroje.cat.traktory.crumbName'), item: 'https://agro-svet.cz/stroje/traktory/' },
     ],
   })} />
-  {brandListJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(brandListJsonLd)} />}
+  {brandListJsonLd && <script type="application/ld+json" is:inline set:html={safeJsonLd(brandListJsonLd)} />}
   <CategoryBrowse category="traktory" />
 </Layout>

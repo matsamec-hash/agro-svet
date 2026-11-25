@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../lib/json-ld';
 // Sdílený listing kategorie strojů (značky + modely). Renderován z:
 //  (a) /stroje/[subcategory] (prerendered cs) a
 //  (b) /_subcat/[subcategory] (SSR) — cíl rewritu z [brand] pro /sk /uk /pl,
@@ -59,8 +60,8 @@ const brandsListJsonLd = subcatBrands.length > 0
   description={tf(locale, 'cat.sub.desc', { catLower: prettyLower, n: subcatModels.length, b: subcatBrands.length })}
   canonical={canonical}
 >
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
-  {brandsListJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(brandsListJsonLd)} />}
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumbJsonLd)} />
+  {brandsListJsonLd && <script type="application/ld+json" is:inline set:html={safeJsonLd(brandsListJsonLd)} />}
   <div style="max-width:1280px; margin:0 auto; padding:48px 32px 80px;">
     <div style="margin-bottom:8px;">
       {groupSlug && groupName ? (

@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../lib/json-ld';
 // src/pages/oepul/index.astro
 // DE-only landing: ÖPUL 2023 — rakouský agroenvironmentální program.
 // Non-de locale → 404 (žádný cs ekvivalent).
@@ -120,7 +121,7 @@ const groups: { title: string; sub: string; rows: Row[] }[] = [
   description={`Die Prämien des ÖPUL je Hektar: UBB-Basismodul ${fmt(ubb.v2025)} €/ha und Bio-Basismodul ${fmt(bio.v2025)} €/ha auf dem Acker seit 2025, Grünland, Erosions- und Grundwasserschutz, Begrünung und die neuen Maßnahmen ab 2025.`}
   noHreflang={true}
 >
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(jsonLd)} />
 
   <div class="db">
     <div class="db-wrap">

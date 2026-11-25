@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../lib/json-ld';
 import Layout from '../../layouts/Layout.astro';
 import { listUpcoming, akceFotoUrl } from '../../lib/akce-supabase';
 import { formatTermin, type TerminInput } from '../../lib/akce-recurrence';
@@ -94,8 +95,8 @@ const akceData = akce.map((a) => ({
     </div>
   </div>
 
-  <script type="application/json" id="akce-data" set:html={JSON.stringify(akceData)}></script>
-  <script type="application/json" id="kraje-data" set:html={JSON.stringify(kraje)}></script>
+  <script type="application/json" id="akce-data" set:html={safeJsonLd(akceData)}></script>
+  <script type="application/json" id="kraje-data" set:html={safeJsonLd(kraje)}></script>
 
   <script>
     import { matchesFilter, buildMonthGrid, upcomingMonths } from '../../lib/akce-hub';

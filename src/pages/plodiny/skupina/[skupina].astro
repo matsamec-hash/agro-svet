@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../../lib/json-ld';
 // SSR — viz plodiny/index.astro (locale prefix a prerender se vylučují).
 export const prerender = false;
 import Layout from '../../../layouts/Layout.astro';
@@ -42,8 +43,8 @@ const totalOdrudy = plodiny.reduce((n, p) => n + p.odrudy.length, 0);
     varieties: totalOdrudy,
   })}
 >
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumb)} />
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(list)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumb)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(list)} />
 
   <div class="pl-skupina">
 

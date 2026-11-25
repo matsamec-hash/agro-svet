@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../../lib/json-ld';
 import Layout from '../../../layouts/Layout.astro';
 import DataSources from '../../../components/svet/DataSources.astro';
 import { compareMatrix, fmtNum, vsReference, normalizeValue, normApplies } from '../../../lib/svet/render';
@@ -170,10 +171,10 @@ const description = L.description;
       {/* Ukazatele Eurostatu a World Bank (WDI) + přepočet na obyvatele z WDI SP.POP.TOTL */}
       <DataSources eurostat worldBank />
     </section>
-    <script type="application/json" id="svet-data" set:html={JSON.stringify(payload)}></script>
-    <script type="application/json" id="svet-units" set:html={JSON.stringify(units)}></script>
-    <script type="application/json" id="svet-colors" set:html={JSON.stringify(colorMap)}></script>
-    <script type="application/json" id="svet-cmp-ui" set:html={JSON.stringify({ numLocale, modenote: L.modenote, detailBase: localizePath(locale, '/svet/'), refSlug, normUnits })}></script>
+    <script type="application/json" id="svet-data" set:html={safeJsonLd(payload)}></script>
+    <script type="application/json" id="svet-units" set:html={safeJsonLd(units)}></script>
+    <script type="application/json" id="svet-colors" set:html={safeJsonLd(colorMap)}></script>
+    <script type="application/json" id="svet-cmp-ui" set:html={safeJsonLd({ numLocale, modenote: L.modenote, detailBase: localizePath(locale, '/svet/'), refSlug, normUnits })}></script>
     <script>
       import { normalizeValue, normApplies, type NormMode } from '../../../lib/svet/render';
       import { buildMultiSeriesModel, MULTI_OPTS, type SeriesInput } from '../../../lib/svet/multichart';

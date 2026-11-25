@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../../../lib/json-ld';
 export const prerender = true;
 import Layout from '../../../../layouts/Layout.astro';
 import { getFarmsByRegion, regionsWithEnoughFarms, regionName, FARM_TYPES, FARM_PRODUCTS } from '../../../../lib/farmy';
@@ -31,8 +32,8 @@ const listJsonLd = itemListSchema(
   description={`Vybrané farmy prodávající ze dvora v kraji ${name}. ${farms.length} farem — brambory, zelenina, mléko, maso, med a další.`}
   canonical={`https://agro-svet.cz/farmy/kraj/${region}/`}
 >
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(listJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(listJsonLd)} />
 
   <div class="kraj-root">
     <header class="kraj-head">

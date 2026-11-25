@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../../lib/json-ld';
 export const prerender = false;
 import Layout from '../../../layouts/Layout.astro';
 import { breadcrumbSchema, faqPageSchema } from '../../../lib/structured-data';
@@ -20,7 +21,7 @@ const faqJsonLd = faqPageSchema(c.faq);
 ---
 
 <Layout title={c.title} description={c.metaDescription} canonical={locale === 'cs' ? canonical : undefined}>
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(faqJsonLd)} />
   <MachineRoi c={c} d={defaults.kombajn} locale={locale} cr={cr} />
 </Layout>

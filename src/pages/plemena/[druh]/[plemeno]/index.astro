@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../../../lib/json-ld';
 // SSR (prerender:false): middleware servíruje /sk verzi přes locals.locale.
 // sk čte z plemena-sk overlay (getPlemeno(...,'sk')); cs render = literály VERBATIM.
 export const prerender = false;
@@ -133,9 +134,9 @@ const faqJsonLd = faqItems ? faqPageSchema(faqItems) : null;
 ---
 
 <Layout title={tf(locale, 'plem.detail.title', { name: pageTitle, druh: druh.name.toLowerCase() })} description={pageDesc} canonical={canonical}>
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(thingJsonLd)} />
-  {faqJsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />}
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(thingJsonLd)} />
+  {faqJsonLd && <script type="application/ld+json" is:inline set:html={safeJsonLd(faqJsonLd)} />}
   <div class="plemeno-page">
 
     <nav class="breadcrumb" aria-label="Cesta">

@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../lib/json-ld';
 // Jeden spojnicový graf historické série. Data předána jako props; Chart.js
 // inicializuje stránka (načte CDN jednou a projede všechny .historie-chart-data).
 interface Props {
@@ -17,7 +18,7 @@ const chart = {
 <figure class="hlc">
   <figcaption class="hlc-cap">{label} <span class="hlc-unit">({unit})</span></figcaption>
   <div class="hlc-wrap"><canvas id={id} height="260"></canvas></div>
-  <script type="application/json" class="historie-chart-data" data-target={id} set:html={JSON.stringify(chart)} />
+  <script type="application/json" class="historie-chart-data" data-target={id} set:html={safeJsonLd(chart)} />
   <p class="hlc-src">Zdroj: {source}</p>
 </figure>
 

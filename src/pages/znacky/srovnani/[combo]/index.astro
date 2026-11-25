@@ -1,4 +1,5 @@
 ---
+import { safeJsonLd } from '../../../../lib/json-ld';
 // Značka-vs-značka srovnání. Prerender top párů (getStaticPaths) + SSR fallback
 // pro jakýkoli validní pár (žádné 404 na validní kombinaci).
 //
@@ -101,8 +102,8 @@ function modelUrl(m: (typeof modelDuels)[number]['a']): string {
 ---
 
 <Layout title={title} description={insights.shortDescription} canonical={canonical}>
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbJsonLd)} />
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(faqJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(breadcrumbJsonLd)} />
+  <script type="application/ld+json" is:inline set:html={safeJsonLd(faqJsonLd)} />
 
   <div class="cmp-page">
     <nav class="breadcrumb" aria-label={tUi(locale, 'a11y.breadcrumb')}>
