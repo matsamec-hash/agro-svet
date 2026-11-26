@@ -15,7 +15,7 @@ import { isLockedSectionPath } from '../i18n/nav';
 import Lightbox from '../components/bazar/Lightbox.astro';
 import CookieConsent from '../components/CookieConsent.astro';
 import { getEnvVar } from '../lib/env';
-import { UMAMI_ZNACKA } from '../lib/mereni';
+import { UMAMI_ZNACKA, meritCestu } from '../lib/mereni';
 
 // Supabase host (bazar + fotosoutěž photos) pro preconnect — z env, ať sleduje
 // aktuální projekt (self-host / cloud) bez natvrdo zadané URL.
@@ -65,6 +65,7 @@ const {
   titleMaxLength,
 } = Astro.props;
 
+const meritNavstevu = meritCestu(Astro.url.pathname);
 const heroPreload = preloadHeroImage ? imgSrcset(preloadHeroImage, preloadHeroSizes, preloadHeroMaxWidth) : null;
 
 const SITE_ORIGIN = 'https://agro-svet.cz';
@@ -217,8 +218,9 @@ const resolvedOgImage = ogImage ? new URL(ogImage, SITE_ORIGIN).toString() : res
       : <link rel="preload" as="image" href={heroPreload.src} fetchpriority="high" />
   )}
 
-  <!-- Vlastní Umami: bez cookies a bez úložiště, proto běží i bez souhlasu (viz src/lib/mereni.ts). -->
-  <script is:inline set:html={UMAMI_ZNACKA} />
+  <!-- Vlastní Umami: bez cookies a bez úložiště, proto běží i bez souhlasu (viz src/lib/mereni.ts).
+       Přihlášení, OAuth návrat, tokenové odkazy, účet a admin se neměří vůbec. -->
+  {meritNavstevu && <script is:inline set:html={UMAMI_ZNACKA} />}
 
   <slot name="head" />
 </head>
