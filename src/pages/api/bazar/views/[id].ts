@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { createAnonClient } from '../../../../lib/supabase';
+import { createServerClient } from '../../../../lib/supabase';
 import { edgeThrottle } from '../../../../lib/edge-throttle';
 import { clientIp } from '../../../../lib/client-ip';
 
@@ -62,7 +62,9 @@ export const POST: APIRoute = async ({ params, request, cookies, clientAddress, 
     path: '/',
   });
 
-  const supabase = createAnonClient();
+  // Počítadlo zvyšuje jen server (service_role): od migrace 029 smí increment_listing_views
+  // volat jen service_role, takže veřejný anon klíč nemůže obejít cookie ani throttle výše.
+  const supabase = createServerClient();
   const { data, error } = await supabase.rpc('increment_listing_views', { listing_id: id });
 
   if (error) {

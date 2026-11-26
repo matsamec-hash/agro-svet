@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { createAnonClient } from '../../../lib/supabase';
+import { createAnonClient, createServerClient } from '../../../lib/supabase';
 import { edgeThrottle } from '../../../lib/edge-throttle';
 import { clientIp } from '../../../lib/client-ip';
 
@@ -77,7 +77,9 @@ export const POST: APIRoute = async ({ params, request, cookies, clientAddress, 
   if (!throttle.ok) return json({ ok: false, reason: 'throttled' }, 200);
 
   try {
-    const supabase = createAnonClient();
+    // Hlas zapisuje jen server (service_role): od migrace 029 smí anketa_vote volat
+    // jen service_role, takže veřejný anon klíč nemůže obejít cookie ani throttle výše.
+    const supabase = createServerClient();
     const { data, error } = await supabase.rpc('anketa_vote', { p_slug: slug, p_option: option });
     if (error) return json({ ok: false, reason: 'rpc_error', tallies: {} });
 
